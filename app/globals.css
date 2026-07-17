@@ -20,7 +20,6 @@
 }
 
 html {
-  overflow-x: clip;
   scroll-behavior: smooth;
 }
 
@@ -2644,7 +2643,7 @@ textarea:focus-visible {
 }
 
 .providers-section::before {
-  right: -24%;
+  right: max(-24%, calc((100% - 100vw) / 2));
   bottom: -20%;
   width: 30rem;
   height: 30rem;
