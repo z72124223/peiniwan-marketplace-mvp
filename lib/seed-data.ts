@@ -43,6 +43,20 @@ export interface SeedProvider {
   featured?: boolean;
 }
 
+export interface SeedReview {
+  id: string;
+  providerId: string;
+  reviewerName: string;
+  createdAt: string;
+  gameId: string;
+  serviceLabel: string;
+  rating: number;
+  emotionalScore: number;
+  technicalScore: number;
+  text: string;
+  repeatCustomer: boolean;
+}
+
 export const seedGames: SeedGame[] = [
   {
     id: "game_lol",
@@ -250,6 +264,103 @@ export const seedProviders: SeedProvider[] = [
     verifiedSkill: true,
   },
 ];
+
+export const seedReviews: SeedReview[] = [
+  {
+    id: "review_an_01", providerId: "provider_an", reviewerName: "阿凱", createdAt: "2026-07-14", gameId: "game_lol",
+    serviceLabel: "輕鬆雙排・60 分鐘", rating: 5, emotionalScore: 5, technicalScore: 4.2,
+    text: "我本來很怕兩個人沒話講，結果她很會看氣氛。想聊天的時候會接，不想講話也不會一直問，整場很舒服。", repeatCustomer: true,
+  },
+  {
+    id: "review_an_02", providerId: "provider_an", reviewerName: "Wen", createdAt: "2026-07-09", gameId: "game_wildrift",
+    serviceLabel: "下班放鬆局・30 分鐘", rating: 4.8, emotionalScore: 5, technicalScore: 3.9,
+    text: "聲音跟試聽差不多，沒有刻意裝可愛。輸兩場也不會硬找正能量，這點我反而很喜歡。", repeatCustomer: false,
+  },
+  {
+    id: "review_an_03", providerId: "provider_an", reviewerName: "小宇", createdAt: "2026-07-02", gameId: "game_lol",
+    serviceLabel: "新手陪玩・60 分鐘", rating: 4.9, emotionalScore: 4.9, technicalScore: 4.1,
+    text: "第一次找陪玩。她會先問我想認真還是隨便玩，沒有亂加戲，也沒有推我再買時數。", repeatCustomer: true,
+  },
+  {
+    id: "review_zhe_01", providerId: "provider_zhe", reviewerName: "Leo", createdAt: "2026-07-15", gameId: "game_valorant",
+    serviceLabel: "積分複盤・2 場", rating: 4.9, emotionalScore: 4.3, technicalScore: 5,
+    text: "沒有從頭念到尾，只抓我最常犯的兩個錯。第二場馬上少死很多，賽後還把重點打成三行給我。", repeatCustomer: true,
+  },
+  {
+    id: "review_zhe_02", providerId: "provider_zhe", reviewerName: "晏", createdAt: "2026-07-07", gameId: "game_valorant",
+    serviceLabel: "戰術陪練・1 場", rating: 4.7, emotionalScore: 4.1, technicalScore: 4.9,
+    text: "講話很直接，但不會酸人。比較適合真的想改問題的人；如果只想聊天放鬆，可能選別位比較對。", repeatCustomer: false,
+  },
+  {
+    id: "review_zhe_03", providerId: "provider_zhe", reviewerName: "K.K.", createdAt: "2026-06-29", gameId: "game_valorant",
+    serviceLabel: "上分陪打・3 場", rating: 5, emotionalScore: 4.5, technicalScore: 5,
+    text: "報點乾淨，不搶指揮，也不會輸一局就開始怪隊友。約的三場有準時打完。", repeatCustomer: true,
+  },
+  {
+    id: "review_yu_01", providerId: "provider_yu", reviewerName: "Mori", createdAt: "2026-07-13", gameId: "game_lol",
+    serviceLabel: "彈性陪玩・60 分鐘", rating: 5, emotionalScore: 4.9, technicalScore: 4.7,
+    text: "聊天很自然，不是一直丟罐頭問題。該報技能的時候也有報，玩到後面真的像固定隊友。", repeatCustomer: true,
+  },
+  {
+    id: "review_yu_02", providerId: "provider_yu", reviewerName: "庭", createdAt: "2026-07-06", gameId: "game_valorant",
+    serviceLabel: "休閒五排・60 分鐘", rating: 4.8, emotionalScore: 4.8, technicalScore: 4.5,
+    text: "我和朋友一起約，她進來不會搶話，也有把比較安靜的人帶進話題。時間到有先問要不要收尾。", repeatCustomer: false,
+  },
+  {
+    id: "review_yu_03", providerId: "provider_yu", reviewerName: "Rin", createdAt: "2026-06-30", gameId: "game_lol",
+    serviceLabel: "深夜雙排・90 分鐘", rating: 4.9, emotionalScore: 5, technicalScore: 4.6,
+    text: "有梗但不吵，連敗也沒有突然安靜。唯一小缺點是熱門時段真的比較難約。", repeatCustomer: true,
+  },
+  {
+    id: "review_mu_01", providerId: "provider_mu", reviewerName: "N", createdAt: "2026-07-12", gameId: "game_wildrift",
+    serviceLabel: "安靜陪玩・60 分鐘", rating: 5, emotionalScore: 5, technicalScore: 3.9,
+    text: "真的可以不用一直講話。我那天很累，只想有人排隊，她沒有把安靜當尷尬，這很難得。", repeatCustomer: true,
+  },
+  {
+    id: "review_mu_02", providerId: "provider_mu", reviewerName: "小魚", createdAt: "2026-07-04", gameId: "game_wildrift",
+    serviceLabel: "睡前兩場・45 分鐘", rating: 4.8, emotionalScore: 4.9, technicalScore: 3.8,
+    text: "語速慢、音量也不會突然很大。比較少主動開很多話題，但這就是我選他的原因。", repeatCustomer: false,
+  },
+  {
+    id: "review_mu_03", providerId: "provider_mu", reviewerName: "Chia", createdAt: "2026-06-27", gameId: "game_wildrift",
+    serviceLabel: "放空局・60 分鐘", rating: 4.9, emotionalScore: 5, technicalScore: 3.9,
+    text: "有先講清楚不做感情承諾，也不會問太私人的事。界線清楚反而讓人比較放鬆。", repeatCustomer: true,
+  },
+  {
+    id: "review_kai_01", providerId: "provider_kai", reviewerName: "Allen", createdAt: "2026-07-10", gameId: "game_valorant",
+    serviceLabel: "團隊陪打・60 分鐘", rating: 4.8, emotionalScore: 4.6, technicalScore: 4.8,
+    text: "報點很穩，不會每一波都要別人照他的打法。輸的時候也有把鍋接住，隊伍氣氛很好。", repeatCustomer: true,
+  },
+  {
+    id: "review_kai_02", providerId: "provider_kai", reviewerName: "花生", createdAt: "2026-07-01", gameId: "game_lol",
+    serviceLabel: "彈性雙排・60 分鐘", rating: 4.7, emotionalScore: 4.5, technicalScore: 4.7,
+    text: "技術跟頁面寫的差不多，話不算多但不會冷場。回訊息慢一點，開打後就很可靠。", repeatCustomer: false,
+  },
+  {
+    id: "review_kai_03", providerId: "provider_kai", reviewerName: "J.C.", createdAt: "2026-06-25", gameId: "game_valorant",
+    serviceLabel: "排位陪打・2 場", rating: 4.9, emotionalScore: 4.7, technicalScore: 4.8,
+    text: "不會為了展現實力一直搶輸出，是真的把隊友的位置做好。下次五排缺人會再找。", repeatCustomer: true,
+  },
+  {
+    id: "review_lin_01", providerId: "provider_lin", reviewerName: "安仔", createdAt: "2026-07-11", gameId: "game_lol",
+    serviceLabel: "觀念教學・60 分鐘", rating: 5, emotionalScore: 4.6, technicalScore: 5,
+    text: "我一直以為自己是操作差，她看完說其實是回城時間亂掉。只改這件事就明顯好很多。", repeatCustomer: true,
+  },
+  {
+    id: "review_lin_02", providerId: "provider_lin", reviewerName: "Sora", createdAt: "2026-07-03", gameId: "game_wildrift",
+    serviceLabel: "新手教學・60 分鐘", rating: 4.9, emotionalScore: 4.7, technicalScore: 5,
+    text: "完全新手也聽得懂。沒有一次塞十個名詞，打完只叫我先練一個習慣，壓力小很多。", repeatCustomer: false,
+  },
+  {
+    id: "review_lin_03", providerId: "provider_lin", reviewerName: "可樂", createdAt: "2026-06-28", gameId: "game_lol",
+    serviceLabel: "賽後復盤・45 分鐘", rating: 4.8, emotionalScore: 4.4, technicalScore: 4.9,
+    text: "會指出問題，但也會說哪裡其實做對了。筆記很短，隔天自己排位還記得要看什麼。", repeatCustomer: true,
+  },
+];
+
+export function getSeedReviews(providerId: string) {
+  return seedReviews.filter((review) => review.providerId === providerId);
+}
 
 export const seedOwnerQueues = {
   applications: [

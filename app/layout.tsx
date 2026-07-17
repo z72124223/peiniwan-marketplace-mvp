@@ -9,14 +9,14 @@ export const metadata: Metadata = {
   description: "以遊戲為入口的 18+ 線上娛樂、語音陪伴與技術服務市場。",
   openGraph: {
     title: "陪你玩｜找到今晚合拍的人",
-    description: "今天想被陪伴，還是想贏？探索 18+ 遊戲陪伴、技術與複合型服務。",
+    description: "想輕鬆打幾場、找人聊天，還是認真練一局？先看看人，覺得對再約。",
     locale: "zh_TW",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "陪你玩｜找到今晚合拍的人",
-    description: "今天想被陪伴，還是想贏？探索 18+ 遊戲陪伴、技術與複合型服務。",
+    description: "想輕鬆打幾場、找人聊天，還是認真練一局？先看看人，覺得對再約。",
   },
 };
 

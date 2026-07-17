@@ -13,24 +13,21 @@ export default function Home() {
       <main>
         <section className="hero section-shell">
           <div className="hero-copy">
-            <p className="eyebrow">18+ 線上娛樂與技能服務市場</p>
-            <h1>
-              今天想被陪伴，
-              <span>還是想贏？</span>
-            </h1>
+            <p className="eyebrow">18+・真人站長在顧的陪玩店</p>
+            <h1>今晚，找個<span>合拍的隊友。</span></h1>
             <p className="hero-lede">
-              找到聲音、個性與遊戲節奏都合拍的人。想輕鬆聊、認真上分，或不知道怎麼選，站長都在。
+              想輕鬆打幾場、找人聊天，還是認真練一局？先看照片、聽聲音，覺得對再約。
             </p>
             <div className="hero-actions">
               <Link className="button button-primary" href="/explore?axis=emotional">
-                今晚想有人懂你
+                我想輕鬆玩
               </Link>
               <Link className="button button-secondary" href="/explore?axis=technical">
-                今晚想贏
+                我想認真打
               </Link>
             </div>
             <Link className="concierge-link" href="/concierge">
-              不知道選誰？讓站長幫你配 <span aria-hidden>→</span>
+              懶得一個個看？跟站長說你要什麼 <span aria-hidden>→</span>
             </Link>
           </div>
 
@@ -61,32 +58,32 @@ export default function Home() {
 
         <section className="need-section section-shell">
           <div className="section-heading">
-            <p className="eyebrow">從今晚需要的感覺開始</p>
-            <h2>不是先選遊戲，是先選你想要的體驗。</h2>
+            <p className="eyebrow">你今天是哪一種？</p>
+            <h2>不用想太多，照你現在的心情選。</h2>
           </div>
           <div className="need-grid">
             <Link className="need-card" href="/explore?axis=emotional">
               <span className="need-number">01</span>
               <div>
-                <h3>有人懂你</h3>
-                <p>陪伴、聊天氛圍、被關注，也能一起輕鬆玩。</p>
-                <span className="text-link">找娛樂／情緒局 →</span>
+                <h3>輕鬆打幾場</h3>
+                <p>下班很累，只想有人一起排、不尬聊，也不催你。</p>
+                <span className="text-link">看看誰適合 →</span>
               </div>
             </Link>
             <Link className="need-card" href="/explore?axis=technical">
               <span className="need-number">02</span>
               <div>
-                <h3>一起把局贏下來</h3>
-                <p>上分、教學、戰術與復盤，能力證明先由站長驗過。</p>
-                <span className="text-link">找技術局 →</span>
+                <h3>想把技術練上去</h3>
+                <p>卡牌位、剛換位置，或想找人把問題直接講清楚。</p>
+                <span className="text-link">找懂的人帶 →</span>
               </div>
             </Link>
             <Link className="need-card need-card-accent" href="/concierge">
               <span className="need-number">03</span>
               <div>
-                <h3>站長幫你配</h3>
-                <p>把遊戲、時間、預算和你在意的感覺告訴本人。</p>
-                <span className="text-link">送出人工派單 →</span>
+                <h3>我懶得選</h3>
+                <p>遊戲、時間、預算丟給站長，本人幫你問誰有空。</p>
+                <span className="text-link">直接跟站長說 →</span>
               </div>
             </Link>
           </div>
@@ -95,8 +92,8 @@ export default function Home() {
         <section className="providers-section section-shell">
           <div className="section-heading heading-row">
             <div>
-              <p className="eyebrow">站長精選・本週可接</p>
-              <h2>先聽聲音，再決定要不要一起玩。</h2>
+              <p className="eyebrow">本週有人可接</p>
+              <h2>先看看人，再聽聽聲音。</h2>
             </div>
             <Link className="text-link" href="/explore">
               看全部陪玩師 →
@@ -111,8 +108,8 @@ export default function Home() {
 
         <section className="how-section section-shell">
           <div className="how-copy">
-            <p className="eyebrow">第一次找陪玩，也不用懂規則</p>
-            <h2>先確認合不合拍，才開始正式計時。</h2>
+            <p className="eyebrow">第一次找也沒關係</p>
+            <h2>看對眼、聊得來，再約時間。</h2>
             <p>
               本版以低風險體驗與人工派單為核心。正式交易上線後，付款授權完成可有 2–3 分鐘真人確認；不合適可換一次人。
             </p>
@@ -135,8 +132,8 @@ export default function Home() {
 
         <section className="games-section section-shell">
           <div className="section-heading">
-            <p className="eyebrow">首發遊戲可由後台替換</p>
-            <h2>三款先做深，不假裝什麼都有。</h2>
+            <p className="eyebrow">目前先顧好這三款</p>
+            <h2>有在玩的，才放上來。</h2>
           </div>
           <div className="game-list">
             {seedGames.map((game) => (
@@ -152,8 +149,8 @@ export default function Home() {
         <section className="safety-section">
           <div className="section-shell safety-inner">
             <div>
-              <p className="eyebrow eyebrow-light">有曖昧的氣氛，也要有清楚的界線</p>
-              <h2>關係感可以是服務，欺騙與脅迫不是。</h2>
+              <p className="eyebrow eyebrow-light">聊得來很好，界線也要講清楚</p>
+              <h2>陪玩是服務，不是拿感情逼你花錢。</h2>
             </div>
             <div className="safety-copy">
               <p>
@@ -167,8 +164,8 @@ export default function Home() {
         </section>
 
         <section className="final-cta section-shell">
-          <p className="eyebrow">今晚，就從一個舒服的選擇開始</p>
-          <h2>自己慢慢看，或讓站長直接幫你配。</h2>
+          <p className="eyebrow">今晚想玩了嗎？</p>
+          <h2>自己挑，或直接把需求丟給站長。</h2>
           <div className="hero-actions">
             <Link className="button button-primary" href="/explore">開始找陪玩師</Link>
             <Link className="button button-secondary" href="/apply">我要成為陪玩師</Link>

@@ -53,9 +53,27 @@ test("首頁會渲染正式 MVP 內容，不含 starter 佔位畫面", async () 
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
   const html = await response.text();
-  assert.match(html, /今天想被陪伴，還是想贏？/);
+  assert.match(html, /今晚，找個/);
+  assert.match(html, /合拍的隊友/);
+  assert.match(html, /照你現在的心情選/);
+  assert.doesNotMatch(html, /今天想被陪伴|不是先選遊戲/);
   assert.match(html, /以遊戲為入口/);
   assert.doesNotMatch(html, /Codex is working|Your site is taking shape|react-loading-skeleton/i);
+});
+
+test("陪玩師卡片的評價數可進入評價列表", async () => {
+  const profileResponse = await render("/providers/xiao-an");
+  assert.equal(profileResponse.status, 200);
+  const profileHtml = await profileResponse.text();
+  assert.match(profileHtml, /href="\/providers\/xiao-an\/reviews"/);
+  assert.match(profileHtml, /看其他玩家怎麼說/);
+
+  const reviewsResponse = await render("/providers/xiao-an/reviews");
+  assert.equal(reviewsResponse.status, 200);
+  const reviewsHtml = await reviewsResponse.text();
+  assert.match(reviewsHtml, /玩家評價/);
+  assert.match(reviewsHtml, /我本來很怕兩個人沒話講/);
+  assert.match(reviewsHtml, /代表性示範評價/);
 });
 
 test("Owner 路由明確揭露正式授權尚未啟用", async () => {

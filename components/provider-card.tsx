@@ -33,7 +33,9 @@ export function ProviderCard({ provider }: { provider: SeedProvider }) {
         <div className="score-row">
           <span>情緒 <strong>{provider.emotionalScore.toFixed(1)}</strong></span>
           <span>技術 <strong>{provider.technicalScore.toFixed(1)}</strong></span>
-          <span>{provider.reviewCount} 則評價</span>
+          <Link className="review-count-link" href={`/providers/${provider.slug}/reviews`} aria-label={`查看 ${provider.displayName} 的 ${provider.reviewCount} 則評價`}>
+            {provider.reviewCount} 則評價 <span aria-hidden>↗</span>
+          </Link>
         </div>
         <div className="provider-card-actions">
           <VoiceSampleButton name={provider.displayName} text={provider.voiceIntro} compact />

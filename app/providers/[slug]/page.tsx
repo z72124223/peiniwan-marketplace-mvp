@@ -71,6 +71,9 @@ export default async function ProviderPage({ params }: { params: Promise<{ slug:
               <div><span>技術能力</span><strong>{provider.technicalScore.toFixed(1)}</strong><i style={{ width: `${provider.technicalScore * 20}%` }} /></div>
             </div>
             <p>{provider.reviewCount} 則完成訂單評價・{provider.repeatRate}% 熟客再次指定</p>
+            <Link className="profile-review-link" href={`/providers/${provider.slug}/reviews`}>
+              看其他玩家怎麼說 <span aria-hidden>→</span>
+            </Link>
           </div>
           <div className="detail-panel">
             <p className="eyebrow">遊戲與能力</p>
