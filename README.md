@@ -1,0 +1,54 @@
+# 陪你玩 v0.2 MVP
+
+以遊戲為入口的 18+ 線上娛樂、關係感與技能服務市場。此版本完成公開探索、陪玩師資料、陪玩師申請、Owner 人工派單與營運工作台骨架。
+
+## Prerequisites
+
+- Node.js `>=22.13.0`
+
+## 本機啟動
+
+```bash
+npm install
+npm run dev
+npm run build
+```
+
+首次提交表單前，請將 migration 套用到本機 D1：
+
+```bash
+npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" --config dist/server/wrangler.json --file drizzle/0000_clumsy_wonder_man.sql
+npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" --config dist/server/wrangler.json --file drizzle/0001_outstanding_daimon_hellstrom.sql
+```
+
+## 已完成範圍
+
+- 公開首頁、探索篩選、6 位假資料陪玩師與個人資料頁
+- 陪玩師申請與「站長幫你配」的 D1 持久化提交
+- Owner 審核／派單／客服／爭議工作台骨架
+- 28 張資料表、Drizzle migration、seed data 與 Supabase/Postgres RLS 草案
+- 金流、KYC、R2、通知與外部通訊的 adapter 介面（尚未串正式供應商）
+- 全球／中國資料面分離的架構邊界；本輪不部署中國正式版
+
+## 安全邊界
+
+- 私密預覽沒有正式身份驗證與 Owner allowlist，`/owner` 只示範不持久化的狀態工作流。
+- 正式上線前必須補齊登入、伺服器端角色授權、個資遮罩、檔案掃描、速率限制與不可竄改稽核。
+- 本專案不是正式法律文件；政策草案需由營運地區的合格律師／法遵覆核。
+- 所有頁面與流程僅限 18 歲以上使用者。
+
+## 驗證指令
+
+- `npm run dev`：啟動本機預覽
+- `npm run lint`：靜態品質檢查
+- `npm run typecheck`：TypeScript 型別檢查
+- `npm test`：migration、表單驗證、Owner 狀態機、建置與伺服器渲染測試
+- `npm run db:generate`：資料結構變更後產生 Drizzle migration
+
+## 重要文件
+
+- `PLANS.md`：實作計畫與 drift log
+- `docs/PRD_v0.2.md`：產品需求與驗收標準
+- `docs/ARCHITECTURE.md`：架構、資料區與 adapter 邊界
+- `docs/SERVICE_POLICY.md`：合法與禁止服務政策草案
+- `docs/rls-draft.sql`：Supabase/Postgres RLS 草案（D1 不直接執行）
