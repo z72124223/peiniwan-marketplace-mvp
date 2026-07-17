@@ -99,3 +99,17 @@ test("服務政策路由揭露 18+ 與禁止內容", async () => {
   assert.match(html, /只服務年滿 18 歲/);
   assert.match(html, /未成年人參與/);
 });
+
+test("錢包頁只顯示清楚標示的示範帳務與非現金點數", async () => {
+  const response = await render("/wallet");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /帳務預覽・沒有真實款項/);
+  assert.match(html, /可提領/);
+  assert.match(html, /待入帳/);
+  assert.match(html, /爭議凍結/);
+  assert.match(html, /點數不是錢/);
+  assert.match(html, /不可購買、轉讓、提領、折抵/);
+  assert.match(html, /正式提領尚未開放/);
+  assert.doesNotMatch(html, /\u0E40\u0E07\u0E34\u0E19/);
+});

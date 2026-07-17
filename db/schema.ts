@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  check,
   index,
   integer,
   primaryKey,
@@ -409,6 +410,149 @@ export const orders = sqliteTable(
   (table) => [
     index("orders_player_idx").on(table.playerId, table.createdAt),
     index("orders_provider_idx").on(table.providerId, table.status, table.requestedStartAt),
+  ]
+);
+
+export const ledgerAccounts = sqliteTable(
+  "ledger_accounts",
+  {
+    id: text("id").primaryKey(),
+    ownerKey: text("owner_key").notNull(),
+    providerId: text("provider_id").references(() => providerProfiles.id),
+    accountCode: text("account_code", {
+      enum: [
+        "processor_clearing",
+        "platform_fee_revenue",
+        "payment_processing_payable",
+        "provider_pending",
+        "provider_available",
+        "provider_frozen",
+      ],
+    }).notNull(),
+    currency: text("currency").notNull(),
+    status: text("status", { enum: ["active", "frozen", "closed"] })
+      .notNull()
+      .default("active"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("ledger_accounts_owner_code_currency_idx").on(
+      table.ownerKey,
+      table.accountCode,
+      table.currency
+    ),
+    index("ledger_accounts_provider_idx").on(table.providerId, table.status),
+  ]
+);
+
+export const ledgerTransactions = sqliteTable(
+  "ledger_transactions",
+  {
+    id: text("id").primaryKey(),
+    eventType: text("event_type", {
+      enum: [
+        "settlement",
+        "release",
+        "freeze",
+        "unfreeze",
+        "payout",
+        "reversal",
+        "adjustment",
+      ],
+    }).notNull(),
+    referenceType: text("reference_type").notNull(),
+    referenceId: text("reference_id").notNull(),
+    idempotencyKey: text("idempotency_key").notNull(),
+    reversalOfTransactionId: text("reversal_of_transaction_id"),
+    description: text("description").notNull(),
+    postedAt: text("posted_at").notNull(),
+    createdAt: createdAt(),
+  },
+  (table) => [
+    uniqueIndex("ledger_transactions_idempotency_idx").on(table.idempotencyKey),
+    index("ledger_transactions_reference_idx").on(
+      table.referenceType,
+      table.referenceId
+    ),
+    index("ledger_transactions_posted_at_idx").on(table.postedAt),
+  ]
+);
+
+export const ledgerPostings = sqliteTable(
+  "ledger_postings",
+  {
+    id: text("id").primaryKey(),
+    transactionId: text("transaction_id")
+      .notNull()
+      .references(() => ledgerTransactions.id),
+    accountId: text("account_id")
+      .notNull()
+      .references(() => ledgerAccounts.id),
+    direction: text("direction", { enum: ["debit", "credit"] }).notNull(),
+    amountMinor: integer("amount_minor").notNull(),
+    currency: text("currency").notNull(),
+    createdAt: createdAt(),
+  },
+  (table) => [
+    check("ledger_postings_amount_positive", sql`${table.amountMinor} > 0`),
+    index("ledger_postings_transaction_idx").on(table.transactionId),
+    index("ledger_postings_account_idx").on(table.accountId, table.createdAt),
+  ]
+);
+
+export const providerPointAccounts = sqliteTable(
+  "provider_point_accounts",
+  {
+    id: text("id").primaryKey(),
+    providerId: text("provider_id")
+      .notNull()
+      .references(() => providerProfiles.id),
+    balancePoints: integer("balance_points").notNull().default(0),
+    status: text("status", { enum: ["active", "frozen", "closed"] })
+      .notNull()
+      .default("active"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("provider_point_accounts_provider_idx").on(table.providerId),
+    check("provider_point_accounts_balance_nonnegative", sql`${table.balancePoints} >= 0`),
+  ]
+);
+
+export const providerPointEntries = sqliteTable(
+  "provider_point_entries",
+  {
+    id: text("id").primaryKey(),
+    accountId: text("account_id")
+      .notNull()
+      .references(() => providerPointAccounts.id),
+    deltaPoints: integer("delta_points").notNull(),
+    balanceAfterPoints: integer("balance_after_points").notNull(),
+    reason: text("reason", {
+      enum: [
+        "opening_balance",
+        "missed_offer",
+        "completed_order",
+        "manual_adjustment",
+        "reversal",
+      ],
+    }).notNull(),
+    referenceType: text("reference_type").notNull(),
+    referenceId: text("reference_id").notNull(),
+    idempotencyKey: text("idempotency_key").notNull(),
+    reversalOfEntryId: text("reversal_of_entry_id"),
+    createdAt: createdAt(),
+  },
+  (table) => [
+    uniqueIndex("provider_point_entries_idempotency_idx").on(table.idempotencyKey),
+    check("provider_point_entries_delta_nonzero", sql`${table.deltaPoints} <> 0`),
+    check(
+      "provider_point_entries_balance_nonnegative",
+      sql`${table.balanceAfterPoints} >= 0`
+    ),
+    index("provider_point_entries_account_idx").on(table.accountId, table.createdAt),
   ]
 );
 

@@ -1,6 +1,6 @@
-# 陪你玩 v0.2 MVP
+# 陪你玩 v0.3 MVP
 
-「陪你玩」是 18+ 遊戲陪玩網站的私密示範版。此版本完成公開探索、陪玩師資料、陪玩師申請與站長人工派單流程；尚未開始真實交易。
+「陪你玩」是 18+ 遊戲陪玩網站的私密示範版。此版本完成公開探索、陪玩師資料、陪玩師申請、站長人工派單流程，以及 `/wallet` 陪玩師錢包唯讀預覽；尚未開始真實交易。
 
 ## Prerequisites
 
@@ -19,6 +19,7 @@ npm run build
 ```bash
 npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" --config dist/server/wrangler.json --file drizzle/0000_clumsy_wonder_man.sql
 npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" --config dist/server/wrangler.json --file drizzle/0001_outstanding_daimon_hellstrom.sql
+npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" --config dist/server/wrangler.json --file drizzle/0002_free_toad_men.sql
 ```
 
 ## 已完成範圍
@@ -26,7 +27,8 @@ npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" -
 - 公開首頁、探索篩選、6 位假資料陪玩師與個人資料頁
 - 陪玩師申請與「站長幫你配」的 D1 持久化提交
 - 未公開的 Owner 審核／派單／客服／爭議工作台程式骨架
-- 28 張資料表、Drizzle migration、seed data 與 Supabase/Postgres RLS 草案
+- 33 張資料表、Drizzle migration、seed data 與 Supabase/Postgres RLS 草案
+- 收益雙式帳本、可靠度點數帳本，以及清楚標示「沒有真實款項」的 `/wallet` 唯讀示範頁
 - 金流、KYC、R2、通知與外部通訊的 adapter 介面（尚未串正式供應商）
 - 全球／中國資料面分離的架構邊界；本輪不部署中國正式版
 
@@ -36,6 +38,7 @@ npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" -
 - 正式上線前必須補齊登入、伺服器端角色授權、個資遮罩、檔案掃描、速率限制與不可竄改稽核。
 - 本專案不是正式法律文件；政策草案需由營運地區的合格律師／法遵覆核。
 - 所有頁面與流程僅限 18 歲以上使用者。
+- 可靠度點數不可購買、轉讓、提領、折抵或兌換現金，也不會直接扣除陪玩師已賺取的收益。
 
 ## 驗證指令
 
