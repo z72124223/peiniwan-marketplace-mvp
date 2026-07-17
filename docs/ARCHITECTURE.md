@@ -5,7 +5,7 @@
 本輪採用 Vinext／React 的手機優先網站，透過 Cloudflare Sites 建置與私密部署。結構化資料放在 D1，照片、語音與技術證明等檔案預留 R2；所有外部供應商都隔離在 adapter（轉接介面）後方。
 
 ```text
-公開網站                Owner 營運骨架
+公開網站                未公開的 Owner 程式骨架
   │                          │
   ├─ 探索／資料頁            ├─ 申請審核
   ├─ 陪玩師申請              ├─ 人工派單
@@ -22,7 +22,7 @@
 
 ## 模組邊界
 
-- `app/`：公開頁面、Owner 頁面與伺服器端寫入入口。
+- `app/`：公開頁面與伺服器端寫入入口；目前不發布 Owner 路由。
 - `components/`：跨頁共用的導覽、卡片、表單與狀態元件。
 - `lib/`：查詢、驗證、金額／評分格式與假資料 fallback。
 - `db/schema.ts`：D1／Drizzle 資料模型。
@@ -41,7 +41,7 @@
 
 - 資料模型包含 `player`、`provider`、`owner`。
 - 本輪沒有自建公開登入，也沒有把任意 ChatGPT 登入者當作 Owner。
-- Owner 畫面是私密預覽中的營運骨架；正式公開前必須加入伺服器端身份驗證與明確 Owner allowlist。
+- Owner 元件與狀態機只保留為營運骨架；在加入伺服器端身份驗證與明確 Owner allowlist 前，`/owner` 維持 404 且不出現在公開導覽。
 - `docs/rls-draft.sql` 提供未來 Supabase／Postgres 路線的列級權限草案；D1 路線仍須在每個伺服器寫入入口執行相同授權規則。
 
 ## 區域資料平面

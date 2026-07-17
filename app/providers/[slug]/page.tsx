@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { VoiceSampleButton } from "@/components/voice-sample-button";
 import { billingUnitLabel, formatPrice, serviceAxisLabel } from "@/lib/format";
-import { seedGames, seedProviders } from "@/lib/seed-data";
+import { getSeedReviews, seedGames, seedProviders } from "@/lib/seed-data";
 
 export function generateStaticParams() {
   return seedProviders.map((provider) => ({ slug: provider.slug }));
@@ -24,6 +24,7 @@ export default async function ProviderPage({ params }: { params: Promise<{ slug:
   const provider = seedProviders.find((item) => item.slug === slug);
   if (!provider) notFound();
   const games = seedGames.filter((game) => provider.games.includes(game.id));
+  const reviewCount = getSeedReviews(provider.id).length;
 
   return (
     <>
@@ -34,12 +35,12 @@ export default async function ProviderPage({ params }: { params: Promise<{ slug:
           <div className="profile-photo-large">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={provider.imageUrl} alt={`${provider.displayName}的示範人像`} />
-            <span className={`status-badge status-${provider.onlineStatus}`}><i />{provider.onlineStatus === "online" ? "現在可接" : provider.onlineStatus === "busy" ? "服務中" : "稍後回覆"}</span>
+            <span className="status-badge status-demo"><i />示範資料</span>
           </div>
           <div className="profile-intro">
             <div className="profile-title-line">
               <span className="axis-label">{serviceAxisLabel(provider.axis)}</span>
-              <span className="verified-line">✓ 照片與語音已人工審核</span>
+              <span className="verified-line">Demo 個人頁・尚未完成真人驗證</span>
             </div>
             <h1>{provider.displayName}<small>{provider.publicGender}</small></h1>
             <h2>{provider.headline}</h2>
@@ -56,21 +57,21 @@ export default async function ProviderPage({ params }: { params: Promise<{ slug:
             <ul>
               <li>玩家看到的就是最終價</li>
               <li>正式付款尚未啟用</li>
-              <li>爭議由 Owner 人工處理</li>
+              <li>正式開放後由站長處理爭議</li>
             </ul>
             <Link className="button button-primary button-full" href={`/concierge?provider=${provider.id}`}>請站長安排</Link>
-            <small>通常 {provider.responseTimeMinutes} 分鐘內回覆</small>
+            <small>目前沒有即時在線狀態或回覆時間承諾</small>
           </aside>
         </section>
 
         <section className="profile-details">
           <div className="score-panel">
-            <p className="eyebrow">雙軸評分</p>
+            <p className="eyebrow">示範評分</p>
             <div className="big-score-grid">
-              <div><span>情緒價值</span><strong>{provider.emotionalScore.toFixed(1)}</strong><i style={{ width: `${provider.emotionalScore * 20}%` }} /></div>
-              <div><span>技術能力</span><strong>{provider.technicalScore.toFixed(1)}</strong><i style={{ width: `${provider.technicalScore * 20}%` }} /></div>
+              <div><span>聊天／陪伴</span><strong>{provider.emotionalScore.toFixed(1)}</strong><i style={{ width: `${provider.emotionalScore * 20}%` }} /></div>
+              <div><span>遊戲／技術</span><strong>{provider.technicalScore.toFixed(1)}</strong><i style={{ width: `${provider.technicalScore * 20}%` }} /></div>
             </div>
-            <p>{provider.reviewCount} 則完成訂單評價・{provider.repeatRate}% 熟客再次指定</p>
+            <p>{reviewCount} 則示範留言・不是實際交易紀錄</p>
             <Link className="profile-review-link" href={`/providers/${provider.slug}/reviews`}>
               看其他玩家怎麼說 <span aria-hidden>→</span>
             </Link>
@@ -84,9 +85,9 @@ export default async function ProviderPage({ params }: { params: Promise<{ slug:
               </div>
             ))}
             <div className="verification-grid">
-              <span className={provider.verifiedPhoto ? "verified" : ""}>✓ 真人照片</span>
-              <span className={provider.verifiedVoice ? "verified" : ""}>✓ 語音樣本</span>
-              <span className={provider.verifiedSkill ? "verified" : "muted"}>{provider.verifiedSkill ? "✓ 技術證明" : "— 此服務不需技術證明"}</span>
+              <span>示範照片欄位</span>
+              <span>示範語音欄位</span>
+              <span>{provider.rankLabel ? "示範技術資料" : "未提供技術資料"}</span>
             </div>
           </div>
         </section>

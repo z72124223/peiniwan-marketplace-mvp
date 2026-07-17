@@ -6,8 +6,8 @@ export function SiteFooter() {
       <div className="section-shell footer-grid">
         <div>
           <Link className="brand" href="/">陪你玩<span aria-hidden>。</span></Link>
-          <p>以遊戲為入口的 18+ 線上娛樂、關係感與技能服務市場。</p>
-          <small>目前為私密 MVP 示範，沒有啟用正式金流或 KYC。</small>
+          <p>想放鬆、想聊天，或想把遊戲練好一點，都可以先看看有沒有合拍的人。</p>
+          <small>目前是示範網站。送出需求不會扣款，也不會自動成立訂單。</small>
         </div>
         <div className="footer-links">
           <strong>開始使用</strong>
@@ -18,12 +18,11 @@ export function SiteFooter() {
         <div className="footer-links">
           <strong>信任與安全</strong>
           <Link href="/policies">合法與禁止服務</Link>
-          <Link href="/owner">Owner 營運骨架</Link>
         </div>
       </div>
       <div className="section-shell footer-bottom">
         <span>© 2026 陪你玩</span>
-        <span>18+ only・Demo data</span>
+        <span>18+・示範資料</span>
       </div>
     </footer>
   );

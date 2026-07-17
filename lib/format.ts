@@ -17,8 +17,8 @@ export function billingUnitLabel(unit: BillingUnit) {
 
 export function serviceAxisLabel(axis: ServiceAxis) {
   return {
-    emotional: "娛樂／情緒",
-    technical: "技術",
-    hybrid: "全能",
+    emotional: "輕鬆陪玩",
+    technical: "教學／上分",
+    hybrid: "都可以",
   }[axis];
 }

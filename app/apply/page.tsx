@@ -3,7 +3,7 @@ import { ApplicationForm } from "@/components/application-form";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
-export const metadata: Metadata = { title: "成為陪玩師", description: "提交陪玩師申請，由 Owner 本人逐筆人工審核。" };
+export const metadata: Metadata = { title: "成為陪玩師", description: "提交陪玩師申請；正式開放後由站長逐筆人工審核。" };
 
 export default function ApplyPage() {
   return (
@@ -12,7 +12,7 @@ export default function ApplyPage() {
       <main className="form-page section-shell">
         <header className="form-page-hero">
           <div><p className="eyebrow">第一批陪玩師招募</p><h1>你負責把服務做好，<br />站長負責把麻煩擋下來。</h1></div>
-          <div className="form-page-promise"><strong>前 10 筆完成訂單平台費 0%</strong><p>不要求獨家、協助整理個人頁與商品文案；正式金流上線後才會開始真實交易。</p></div>
+          <div className="form-page-promise"><strong>目前開放示範申請</strong><p>送出不代表錄取或公開上架，也不會開始收費；正式招募條件會在營運前公告。</p></div>
         </header>
         <div className="form-layout">
           <ApplicationForm />

@@ -57,7 +57,8 @@ test("首頁會渲染正式 MVP 內容，不含 starter 佔位畫面", async () 
   assert.match(html, /合拍的隊友/);
   assert.match(html, /照你現在的心情選/);
   assert.doesNotMatch(html, /今天想被陪伴|不是先選遊戲/);
-  assert.match(html, /以遊戲為入口/);
+  assert.match(html, /目前是示範網站/);
+  assert.doesNotMatch(html, /站長在線|現在可接|href="\/owner"/);
   assert.doesNotMatch(html, /Codex is working|Your site is taking shape|react-loading-skeleton/i);
 });
 
@@ -71,18 +72,23 @@ test("陪玩師卡片的評價數可進入評價列表", async () => {
   const reviewsResponse = await render("/providers/xiao-an/reviews");
   assert.equal(reviewsResponse.status, 200);
   const reviewsHtml = await reviewsResponse.text();
-  assert.match(reviewsHtml, /玩家評價/);
-  assert.match(reviewsHtml, /我本來很怕兩個人沒話講/);
-  assert.match(reviewsHtml, /代表性示範評價/);
+  assert.match(reviewsHtml, /示範留言/);
+  assert.match(reviewsHtml, /不是實際交易紀錄/);
+  assert.doesNotMatch(reviewsHtml, /完成訂單評價|示範完成訂單|★★★★★/);
 });
 
-test("Owner 路由明確揭露正式授權尚未啟用", async () => {
+test("沒有正式授權時不公開 Owner 路由", async () => {
   const response = await render("/owner");
+  assert.equal(response.status, 404);
+});
+
+test("陪玩師資料頁不把 Demo 寫成即時、已驗證或完成訂單資料", async () => {
+  const response = await render("/providers/xiao-an");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Owner 營運骨架/);
-  assert.match(html, /正式身份驗證與 Owner allowlist 尚未啟用/);
-  assert.match(html, /不會寫入正式後台/);
+  assert.match(html, /尚未完成真人驗證/);
+  assert.match(html, /不是實際交易紀錄/);
+  assert.doesNotMatch(html, /現在可接|分鐘內回覆|照片與語音已人工審核|完成訂單評價/);
 });
 
 test("服務政策路由揭露 18+ 與禁止內容", async () => {

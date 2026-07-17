@@ -92,9 +92,9 @@ export function ApplicationForm() {
         <fieldset>
           <legend>服務方向 *</legend>
           <div className="choice-grid">
-            <label className="choice-card"><input type="checkbox" name="serviceAxes" value="emotional" /><strong>娛樂／情緒</strong><span>陪伴、聊天、氣氛與關係感</span></label>
-            <label className="choice-card"><input type="checkbox" name="serviceAxes" value="technical" /><strong>技術</strong><span>教學、戰術、上分與復盤</span></label>
-            <label className="choice-card"><input type="checkbox" name="serviceAxes" value="hybrid" /><strong>全能</strong><span>有氣氛，也有一定技術</span></label>
+            <label className="choice-card"><input type="checkbox" name="serviceAxes" value="emotional" /><strong>輕鬆陪玩</strong><span>聊天、陪伴與輕鬆遊戲</span></label>
+            <label className="choice-card"><input type="checkbox" name="serviceAxes" value="technical" /><strong>教學／上分</strong><span>教學、戰術與賽後整理</span></label>
+            <label className="choice-card"><input type="checkbox" name="serviceAxes" value="hybrid" /><strong>兩種都可以</strong><span>會帶氣氛，也能認真打</span></label>
           </div>
           {fieldError.serviceAxes && <small className="field-error">{fieldError.serviceAxes}</small>}
         </fieldset>
@@ -129,7 +129,7 @@ export function ApplicationForm() {
 
       {state.status === "error" && <div className="form-error" role="alert">{state.message}</div>}
       <button className="button button-primary submit-button" disabled={state.status === "submitting"} type="submit">{state.status === "submitting" ? "安全保存中…" : "送出陪玩師申請"}</button>
-      <p className="form-footnote">送出不代表自動上架；所有申請由 Owner 本人審核。</p>
+      <p className="form-footnote">送出不代表自動上架；正式開放後由站長逐筆審核。</p>
     </form>
   );
 }

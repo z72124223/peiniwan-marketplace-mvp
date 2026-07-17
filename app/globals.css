@@ -121,24 +121,6 @@ textarea:focus-visible {
   gap: 14px;
 }
 
-.owner-live {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: var(--green);
-  font-size: 13px;
-  font-weight: 750;
-}
-
-.owner-live i,
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: var(--green);
-  box-shadow: 0 0 0 5px rgba(47, 125, 90, 0.12);
-}
-
 .button {
   display: inline-flex;
   min-height: 48px;
@@ -527,6 +509,10 @@ textarea:focus-visible {
   background: var(--green);
 }
 
+.status-demo i {
+  background: var(--accent);
+}
+
 .status-busy i {
   background: #d09a38;
 }
@@ -562,16 +548,18 @@ textarea:focus-visible {
   line-height: 1.55;
 }
 
-.verified-mark {
-  display: grid;
-  width: 22px;
-  height: 22px;
-  flex: 0 0 22px;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--ink);
-  color: white;
-  font-size: 11px;
+.demo-mark {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding-inline: 8px;
+  background: #302922;
+  color: var(--ink-soft);
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
 }
 
 .tag-row {
@@ -2706,7 +2694,7 @@ textarea:focus-visible {
   border-color: var(--line);
 }
 
-.verified-mark,
+.demo-mark,
 .steps-list > li > span,
 .filter-chips button.active,
 .form-section-heading > span {
@@ -2997,9 +2985,12 @@ textarea:focus-visible {
   margin-top: 24px;
 }
 
-.review-stars {
-  color: #df9b4c;
-  letter-spacing: 0.08em;
+.review-score-label {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 8px;
+  color: var(--ink-soft);
+  font-size: 10px;
 }
 
 .review-rating-line > span:last-child {

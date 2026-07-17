@@ -17,10 +17,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     : { title: "找不到評價" };
 }
 
-function formatReviewDate(value: string) {
-  return new Intl.DateTimeFormat("zh-TW", { year: "numeric", month: "long", day: "numeric" }).format(new Date(`${value}T00:00:00+08:00`));
-}
-
 export default async function ProviderReviewsPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const provider = seedProviders.find((item) => item.slug === slug);
@@ -40,9 +36,9 @@ export default async function ProviderReviewsPage({ params }: { params: Promise<
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={provider.imageUrl} alt={`${provider.displayName}的示範人像`} />
             <div>
-              <p className="eyebrow">玩家評價</p>
+              <p className="eyebrow">示範留言</p>
               <h1>{provider.displayName}<span>{overallScore}</span></h1>
-              <p>{provider.reviewCount} 則完成訂單評價・{provider.repeatRate}% 熟客再次指定</p>
+              <p>{reviews.length} 則示範留言・不是實際交易紀錄</p>
             </div>
           </div>
           <div className="reviews-score-summary" aria-label={`${provider.displayName}的評分摘要`}>
@@ -53,10 +49,10 @@ export default async function ProviderReviewsPage({ params }: { params: Promise<
 
         <section className="reviews-heading">
           <div>
-            <span className="eyebrow">最近的評價</span>
+            <span className="eyebrow">看看文字合不合你的胃口</span>
             <h2>分數只能看大概，留言比較有用。</h2>
           </div>
-          <p>目前顯示 3 則代表性示範評價。正式版只接受已付款且完成服務的玩家留言。</p>
+          <p>以下內容只用來測試版面與閱讀感，不代表真實玩家、訂單或服務結果。正式版只接受完成服務後的留言。</p>
         </section>
 
         <section className="review-list" aria-label={`${provider.displayName}的評價列表`}>
@@ -68,12 +64,12 @@ export default async function ProviderReviewsPage({ params }: { params: Promise<
                   <div className="reviewer-avatar" aria-hidden>{review.reviewerName.slice(0, 1).toUpperCase()}</div>
                   <div>
                     <strong>{review.reviewerName}</strong>
-                    <span>{formatReviewDate(review.createdAt)}・示範完成訂單</span>
+                    <span>示範留言・非真實訂單</span>
                   </div>
-                  {review.repeatCustomer && <span className="repeat-badge">再次指定</span>}
+                  {review.repeatCustomer && <span className="repeat-badge">示範：想再約</span>}
                 </div>
                 <div className="review-rating-line">
-                  <span className="review-stars" aria-label={`整體評分 ${review.rating} 分`}>★★★★★</span>
+                  <span className="review-score-label">整體</span>
                   <strong>{review.rating.toFixed(1)}</strong>
                   <span>{game?.name}・{review.serviceLabel}</span>
                 </div>

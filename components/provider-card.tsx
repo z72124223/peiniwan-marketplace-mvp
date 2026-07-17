@@ -1,21 +1,19 @@
 import Link from "next/link";
-import type { SeedProvider } from "@/lib/seed-data";
+import { getSeedReviews, type SeedProvider } from "@/lib/seed-data";
 import { formatPrice, billingUnitLabel, serviceAxisLabel } from "@/lib/format";
 import { VoiceSampleButton } from "./voice-sample-button";
 
 export function ProviderCard({ provider }: { provider: SeedProvider }) {
+  const reviewCount = getSeedReviews(provider.id).length;
+
   return (
     <article className="provider-card">
       <Link className="provider-photo" href={`/providers/${provider.slug}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={provider.imageUrl} alt={`${provider.displayName}的示範人像`} loading="lazy" />
-        <span className={`status-badge status-${provider.onlineStatus}`}>
+        <span className="status-badge status-demo">
           <i />
-          {provider.onlineStatus === "online"
-            ? "現在可接"
-            : provider.onlineStatus === "busy"
-              ? "服務中"
-              : "稍後回覆"}
+          示範資料
         </span>
         <span className="axis-badge">{serviceAxisLabel(provider.axis)}</span>
       </Link>
@@ -25,16 +23,16 @@ export function ProviderCard({ provider }: { provider: SeedProvider }) {
             <h3><Link href={`/providers/${provider.slug}`}>{provider.displayName}</Link></h3>
             <p>{provider.publicGender}・{provider.headline}</p>
           </div>
-          <span className="verified-mark" title="示範資料已標示人工審核">✓</span>
+          <span className="demo-mark" title="示範資料，尚未完成真人驗證">Demo</span>
         </div>
         <div className="tag-row">
           {provider.personaTags.slice(0, 3).map((tag) => <span key={tag}>{tag}</span>)}
         </div>
         <div className="score-row">
-          <span>情緒 <strong>{provider.emotionalScore.toFixed(1)}</strong></span>
-          <span>技術 <strong>{provider.technicalScore.toFixed(1)}</strong></span>
-          <Link className="review-count-link" href={`/providers/${provider.slug}/reviews`} aria-label={`查看 ${provider.displayName} 的 ${provider.reviewCount} 則評價`}>
-            {provider.reviewCount} 則評價 <span aria-hidden>↗</span>
+          <span>聊天 <strong>{provider.emotionalScore.toFixed(1)}</strong></span>
+          <span>遊戲 <strong>{provider.technicalScore.toFixed(1)}</strong></span>
+          <Link className="review-count-link" href={`/providers/${provider.slug}/reviews`} aria-label={`查看 ${provider.displayName} 的 ${reviewCount} 則示範留言`}>
+            {reviewCount} 則示範留言 <span aria-hidden>↗</span>
           </Link>
         </div>
         <div className="provider-card-actions">

@@ -54,7 +54,7 @@ export default function PoliciesPage() {
           </div>
           <ol>
             <li><strong>停止與回報</strong><p>覺得不安全時先離開互動，保留合法取得的最小必要證據。</p></li>
-            <li><strong>風險分級</strong><p>Owner 可先隱藏服務或暫停資格，再向雙方收集說明。</p></li>
+            <li><strong>風險分級</strong><p>站長可先隱藏服務或暫停資格，再向雙方收集說明。</p></li>
             <li><strong>人工決策</strong><p>補件、拒絕、退款、停權與解封皆須留下原因與稽核。</p></li>
             <li><strong>申訴與覆核</strong><p>當事人可補充新證據；未來有團隊後導入雙人覆核。</p></li>
           </ol>
@@ -62,8 +62,8 @@ export default function PoliciesPage() {
 
         <section className="policy-boundaries">
           <article><span>18+</span><h3>不服務未成年人</h3><p>謊報年齡、招攬未成年人或要求私下聯絡，一律禁止。</p></article>
-          <article><span>0</span><h3>不做 AI 自動封禁</h3><p>第一版所有高風險處置均由 Owner 人工判斷。</p></article>
-          <article><span>Demo</span><h3>尚未啟用正式金流</h3><p>目前價格、訂單與退款僅是測試或人工協調流程。</p></article>
+          <article><span>0</span><h3>不做 AI 自動封禁</h3><p>正式開放後，所有高風險處置都由站長人工判斷。</p></article>
+          <article><span>Demo</span><h3>現在不會收款</h3><p>目前價格和流程只用來測試畫面，不會建立真實訂單或退款。</p></article>
           <article><span>Global</span><h3>不宣稱中國合規上線</h3><p>中國區需獨立資料面與當地法律、雲端、身份及金流覆核。</p></article>
         </section>
 

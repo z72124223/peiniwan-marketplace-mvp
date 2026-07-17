@@ -14,9 +14,8 @@ export function SiteHeader() {
           <Link href="/policies">服務界線</Link>
         </nav>
         <div className="header-actions">
-          <span className="owner-live"><i /> 站長在線</span>
-          <Link className="button button-small button-dark" href="/owner">
-            Owner
+          <Link className="button button-small button-dark" href="/concierge">
+            跟站長說需求
           </Link>
         </div>
       </div>

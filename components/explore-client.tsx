@@ -16,7 +16,6 @@ export function ExploreClient({
   const [axis, setAxis] = useState<AxisFilter>(initialAxis);
   const [game, setGame] = useState(initialGame);
   const [gender, setGender] = useState("all");
-  const [onlyOnline, setOnlyOnline] = useState(false);
 
   const providers = useMemo(
     () =>
@@ -24,10 +23,9 @@ export function ExploreClient({
         if (axis !== "all" && provider.axis !== axis) return false;
         if (game !== "all" && !provider.games.includes(game)) return false;
         if (gender !== "all" && provider.publicGender !== gender) return false;
-        if (onlyOnline && provider.onlineStatus !== "online") return false;
         return true;
       }),
-    [axis, game, gender, onlyOnline]
+    [axis, game, gender]
   );
 
   return (
@@ -64,16 +62,12 @@ export function ExploreClient({
               <option value="不公開">不公開</option>
             </select>
           </label>
-          <label className="toggle-label">
-            <input checked={onlyOnline} onChange={(event) => setOnlyOnline(event.target.checked)} type="checkbox" />
-            <span>只看現在可接</span>
-          </label>
         </div>
       </div>
 
       <div className="result-heading">
-        <p>找到 <strong>{providers.length}</strong> 位符合條件的陪玩師</p>
-        <span>依站長精選與近期可接狀態排序</span>
+        <p>示範名單中有 <strong>{providers.length}</strong> 位符合條件</p>
+        <span>正式開放後才會顯示可預約時段</span>
       </div>
 
       {providers.length ? (

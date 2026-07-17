@@ -13,7 +13,7 @@ export default function Home() {
       <main>
         <section className="hero section-shell">
           <div className="hero-copy">
-            <p className="eyebrow">18+・真人站長在顧的陪玩店</p>
+            <p className="eyebrow">18+・先看人，再決定要不要約</p>
             <h1>今晚，找個<span>合拍的隊友。</span></h1>
             <p className="hero-lede">
               想輕鬆打幾場、找人聊天，還是認真練一局？先看照片、聽聲音，覺得對再約。
@@ -44,16 +44,15 @@ export default function Home() {
               </article>
             ))}
             <div className="hero-note">
-              <span className="status-dot" />
-              4 位現在可接
+              示範名單・尚未開放接單
             </div>
           </div>
         </section>
 
         <section className="trust-strip section-shell" aria-label="平台特色">
-          <span>真人照片與語音人工審核</span>
-          <span>玩家看到的就是最終價</span>
-          <span>真人站長處理派單與爭議</span>
+          <span>正式上架前會人工確認照片與語音</span>
+          <span>目前價格是示範，不會直接扣款</span>
+          <span>需求會由真人站長逐筆查看</span>
         </section>
 
         <section className="need-section section-shell">
@@ -92,7 +91,7 @@ export default function Home() {
         <section className="providers-section section-shell">
           <div className="section-heading heading-row">
             <div>
-              <p className="eyebrow">本週有人可接</p>
+              <p className="eyebrow">先逛逛示範名單</p>
               <h2>先看看人，再聽聽聲音。</h2>
             </div>
             <Link className="text-link" href="/explore">
@@ -111,13 +110,13 @@ export default function Home() {
             <p className="eyebrow">第一次找也沒關係</p>
             <h2>看對眼、聊得來，再約時間。</h2>
             <p>
-              本版以低風險體驗與人工派單為核心。正式交易上線後，付款授權完成可有 2–3 分鐘真人確認；不合適可換一次人。
+              現在可以先看資料、聽聲音，再把需求留給站長。這裡不會扣款，也沒有保證回覆時間；正式開放後才會公布付款與確認流程。
             </p>
           </div>
           <ol className="steps-list">
             <li>
               <span>1</span>
-              <div><strong>看資料、聽聲音</strong><p>照片、人設、評分、價格與驗證狀態一次看清楚。</p></div>
+              <div><strong>看資料、聽聲音</strong><p>示範照片、人設、留言和價格都先看過，再決定要不要問。</p></div>
             </li>
             <li>
               <span>2</span>
@@ -125,7 +124,7 @@ export default function Home() {
             </li>
             <li>
               <span>3</span>
-              <div><strong>外部語音完成服務</strong><p>第一版不自建語音房，聯繫與服務邊界更容易管理。</p></div>
+              <div><strong>確認後再往下走</strong><p>目前只收需求，不會建立付款訂單；正式流程會在開放前說清楚。</p></div>
             </li>
           </ol>
         </section>
