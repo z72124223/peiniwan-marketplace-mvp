@@ -22,6 +22,13 @@
       "when": 1784296372981,
       "tag": "0002_free_toad_men",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1784309662240,
+      "tag": "0003_military_chimera",
+      "breakpoints": true
     }
   ]
 }

@@ -1,42 +1,51 @@
 import type { Metadata } from "next";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { formatPrice } from "@/lib/format";
 import {
-  walletDemoMoneyEntries,
-  walletDemoPointEntries,
-  walletDemoProfile,
+  walletDemoExchange,
+  walletDemoPlayer,
+  walletDemoPlayerEntries,
+  walletDemoProvider,
+  walletDemoProviderEntries,
 } from "@/lib/wallet-demo-data";
 
 export const metadata: Metadata = {
-  title: "陪玩師錢包示範",
-  description: "陪玩師收益與可靠度點數的唯讀帳務預覽。",
+  title: "金錢點數錢包示範",
+  description: "台幣買點、陪玩扣點、逾時扣款與現金兌換的唯讀預覽。",
 };
 
-const moneyCards = [
+function formatPoints(points: number) {
+  return `${points.toLocaleString("zh-TW")} 點`;
+}
+
+function formatPointDelta(points: number) {
+  return `${points > 0 ? "+" : ""}${points.toLocaleString("zh-TW")} 點`;
+}
+
+const summaryCards = [
   {
-    label: "可提領",
-    amountMinor: walletDemoProfile.availableMinor,
-    note: "已過等待期，沒有爭議",
+    label: "玩家可用",
+    points: walletDemoPlayer.availablePoints,
+    note: "可選陪玩或購買平台商品",
     tone: "available",
   },
   {
-    label: "待入帳",
-    amountMinor: walletDemoProfile.pendingMinor,
-    note: "等服務與訂單確認",
+    label: "玩家已保留",
+    points: walletDemoPlayer.heldPoints,
+    note: "等陪玩師接受；逾時會全數返還",
     tone: "pending",
   },
   {
-    label: "爭議凍結",
-    amountMinor: walletDemoProfile.frozenMinor,
-    note: "保留原收益，待人工確認",
-    tone: "frozen",
+    label: "陪玩師可兌現",
+    points: walletDemoProvider.redeemablePoints,
+    note: "具台幣價值，可進入撥款流程",
+    tone: "paid",
   },
   {
-    label: "累計已撥",
-    amountMinor: walletDemoProfile.paidMinor,
-    note: "外部服務商確認後才計入",
-    tone: "paid",
+    label: "陪玩師待入帳",
+    points: walletDemoProvider.pendingPoints,
+    note: "服務完成，等待確認與爭議期",
+    tone: "frozen",
   },
 ] as const;
 
@@ -47,47 +56,64 @@ export default function WalletPage() {
       <main className="wallet-page">
         <section className="wallet-hero section-shell">
           <div className="wallet-title-block">
-            <p className="eyebrow">陪玩師帳務・{walletDemoProfile.displayName}</p>
-            <h1>每一筆錢，<span>現在卡在哪裡。</span></h1>
+            <p className="eyebrow">金錢點數錢包・Demo</p>
+            <h1>台幣買點，<span>點數就是錢。</span></h1>
             <p>
-              收益和可靠度分開算。錢不會因為扣點消失，帳務有問題也只會先凍結，等人工把事情查清楚。
+              玩家用點數選陪玩師；陪玩師完成服務後取得可兌現點數。打卡後被選中卻沒有在 1 分鐘內接受，扣的也是陪玩師錢包。
             </p>
           </div>
 
           <aside className="wallet-demo-notice" aria-label="示範資料提醒">
             <span>DEMO</span>
             <div>
-              <strong>帳務預覽・沒有真實款項</strong>
-              <p>目前沒有接通付款或撥款，也不能在這裡提領、儲值或轉帳。</p>
+              <strong>{walletDemoExchange.label}</strong>
+              <p>產品模型已按金錢點數設計；目前仍未接收或撥付真實款項。</p>
             </div>
           </aside>
         </section>
 
-        <section className="wallet-summary section-shell" aria-label="收益狀態">
-          {moneyCards.map((card) => (
+        <section className="wallet-summary section-shell" aria-label="點數錢包摘要">
+          {summaryCards.map((card) => (
             <article className="wallet-money-card" data-tone={card.tone} key={card.label}>
-              <div className="wallet-card-label">
-                <i aria-hidden />
-                <span>{card.label}</span>
-              </div>
-              <strong>{formatPrice(card.amountMinor, walletDemoProfile.currency)}</strong>
+              <div className="wallet-card-label"><i aria-hidden /><span>{card.label}</span></div>
+              <strong>{formatPoints(card.points)}</strong>
               <p>{card.note}</p>
             </article>
           ))}
+        </section>
+
+        <section className="wallet-money-model section-shell">
+          <div>
+            <span>01</span>
+            <strong>玩家用台幣買點</strong>
+            <p>付款成功後加入可用點數，同時記錄當時匯率與台幣價值。</p>
+          </div>
+          <i aria-hidden>→</i>
+          <div>
+            <span>02</span>
+            <strong>點選陪玩先保留</strong>
+            <p>不是立刻花掉。對方拒絕或逾時，保留點數完整退回。</p>
+          </div>
+          <i aria-hidden>→</i>
+          <div>
+            <span>03</span>
+            <strong>完成後才能兌現</strong>
+            <p>服務完成後進入陪玩師收益，等待期結束才可申請換台幣。</p>
+          </div>
         </section>
 
         <section className="wallet-body section-shell">
           <div className="wallet-ledger-panel">
             <div className="wallet-section-heading">
               <div>
-                <p className="eyebrow">收益明細</p>
-                <h2>不是只給你一個餘額。</h2>
+                <p className="eyebrow">玩家錢包・{walletDemoPlayer.displayName}</p>
+                <h2>先保留，接單成立才扣。</h2>
               </div>
               <span>示範紀錄</span>
             </div>
 
             <div className="wallet-entry-list">
-              {walletDemoMoneyEntries.map((entry) => (
+              {walletDemoPlayerEntries.map((entry) => (
                 <article className="wallet-entry" key={entry.id}>
                   <div className="wallet-entry-copy">
                     <time>{entry.date}</time>
@@ -96,60 +122,89 @@ export default function WalletPage() {
                   </div>
                   <div className="wallet-entry-value">
                     <span data-status={entry.status}>{entry.statusLabel}</span>
-                    <strong>{formatPrice(entry.amountMinor, walletDemoProfile.currency)}</strong>
+                    <strong className={entry.deltaPoints < 0 ? "is-negative" : "is-positive"}>
+                      {formatPointDelta(entry.deltaPoints)}
+                    </strong>
                   </div>
                 </article>
               ))}
             </div>
           </div>
 
-          <aside className="reliability-panel">
-            <p className="eyebrow">接單可靠度</p>
-            <div className="reliability-score">
-              <strong>{walletDemoProfile.reliabilityPoints}</strong>
-              <span>/ {walletDemoProfile.reliabilityMaximum}</span>
-            </div>
-            <div className="reliability-meter" aria-label="可靠度 95 分（滿分 100 分）">
-              <i style={{ width: `${walletDemoProfile.reliabilityPoints}%` }} />
-            </div>
-            <p className="reliability-intro">
-              打卡代表真的準備接單。被玩家選中後，若 1 分鐘內沒有接受，系統會自動下線並留下扣點紀錄。
+          <aside className="wallet-rule-panel">
+            <p className="eyebrow">逾時規則</p>
+            <strong className="wallet-rule-time">1:00</strong>
+            <p className="wallet-rule-intro">
+              陪玩師打卡後被玩家選中，必須在 1 分鐘內接受。沒有接受就會自動下線，並直接扣除錢包裡可兌現的點數。
             </p>
+            <div className="wallet-penalty-example">
+              <span>示範扣款</span>
+              <strong>−10 點</strong>
+              <p>約 NT$10・正式扣款額尚未定案</p>
+            </div>
+            <ol className="wallet-rule-list">
+              <li><span>1</span>玩家保留點數全數返還</li>
+              <li><span>2</span>陪玩師自動下線</li>
+              <li><span>3</span>陪玩師錢包直接扣點</li>
+              <li><span>4</span>申訴成立後用沖正補回</li>
+            </ol>
+          </aside>
+        </section>
 
-            <div className="point-entry-list">
-              {walletDemoPointEntries.map((entry) => (
-                <article key={entry.id}>
-                  <div>
+        <section className="wallet-body section-shell">
+          <div className="wallet-ledger-panel">
+            <div className="wallet-section-heading">
+              <div>
+                <p className="eyebrow">陪玩師錢包・{walletDemoProvider.displayName}</p>
+                <h2>收入、扣款、兌現都留紀錄。</h2>
+              </div>
+              <span>示範紀錄</span>
+            </div>
+            <div className="wallet-entry-list">
+              {walletDemoProviderEntries.map((entry) => (
+                <article className="wallet-entry" key={entry.id}>
+                  <div className="wallet-entry-copy">
                     <time>{entry.date}</time>
                     <strong>{entry.title}</strong>
                     <p>{entry.note}</p>
                   </div>
-                  <b className={entry.deltaPoints < 0 ? "is-negative" : "is-positive"}>
-                    {entry.deltaPoints > 0 ? "+" : ""}{entry.deltaPoints}
-                  </b>
+                  <div className="wallet-entry-value">
+                    <span data-status={entry.status}>{entry.statusLabel}</span>
+                    <strong className={entry.deltaPoints < 0 ? "is-negative" : "is-positive"}>
+                      {formatPointDelta(entry.deltaPoints)}
+                    </strong>
+                  </div>
                 </article>
               ))}
             </div>
+          </div>
 
-            <div className="points-boundary">
-              <strong>點數不是錢</strong>
-              <p>不可購買、轉讓、提領、折抵，也不能兌換現金。</p>
+          <aside className="wallet-rule-panel wallet-redemption-panel">
+            <p className="eyebrow">點數可換現金</p>
+            <strong className="wallet-rule-time">{formatPoints(walletDemoProvider.redeemablePoints)}</strong>
+            <p className="wallet-rule-intro">
+              這不是遊戲分數。可兌現點數有台幣價值，正式版會交給外部金流服務商撥款。
+            </p>
+            <div className="wallet-balance-detail">
+              <div><span>爭議凍結</span><strong>{formatPoints(walletDemoProvider.frozenPoints)}</strong></div>
+              <div><span>累計已兌現</span><strong>{formatPoints(walletDemoProvider.lifetimeRedeemedPoints)}</strong></div>
             </div>
+            <div className="wallet-closed-action">真實兌現尚未接通</div>
           </aside>
         </section>
 
         <section className="wallet-flow section-shell">
           <div>
-            <p className="eyebrow">錢怎麼走</p>
-            <h2>先把帳算清楚，才談提領。</h2>
+            <p className="eyebrow">下一個用途</p>
+            <h2>同一種點數，也能買虛擬禮物。</h2>
           </div>
-          <ol>
-            <li><span>01</span><strong>訂單完成</strong><p>收益先進待入帳，不會立刻變成可提領。</p></li>
-            <li><span>02</span><strong>等待確認</strong><p>沒有退款或爭議，才會釋放成可提領。</p></li>
-            <li><span>03</span><strong>外部撥款</strong><p>正式版由合規服務商處理；平台不做儲值錢包。</p></li>
-          </ol>
-          <div className="wallet-closed-action" aria-label="正式提領尚未開放">
-            正式提領尚未開放
+          <p className="wallet-gift-copy">
+            禮物會沿用同一套金錢點數帳本與分潤紀錄。目前只預留帳務路徑，商城、送禮按鈕與玩家間轉點都還沒開放。
+          </p>
+          <div className="wallet-trade-locks">
+            <span>虛擬禮物・尚未開放</span>
+            <span>玩家間轉點・尚未開放</span>
+            <span>點數交易市場・尚未開放</span>
           </div>
         </section>
       </main>

@@ -427,6 +427,9 @@ export const ledgerAccounts = sqliteTable(
         "provider_pending",
         "provider_available",
         "provider_frozen",
+        "customer_credit_liability",
+        "provider_credit_liability",
+        "penalty_reserve",
       ],
     }).notNull(),
     currency: text("currency").notNull(),
@@ -457,6 +460,14 @@ export const ledgerTransactions = sqliteTable(
         "freeze",
         "unfreeze",
         "payout",
+        "point_purchase",
+        "point_hold",
+        "point_hold_release",
+        "point_spend",
+        "point_transfer",
+        "missed_offer_penalty",
+        "gift_purchase",
+        "redemption",
         "reversal",
         "adjustment",
       ],
@@ -501,7 +512,9 @@ export const ledgerPostings = sqliteTable(
   ]
 );
 
-export const providerPointAccounts = sqliteTable(
+// Legacy v0.3 tables stay mapped only to preserve any existing rows during migration.
+// New product code must use walletCreditAccounts and walletCreditEntries below.
+export const legacyReliabilityAccounts = sqliteTable(
   "provider_point_accounts",
   {
     id: text("id").primaryKey(),
@@ -521,13 +534,13 @@ export const providerPointAccounts = sqliteTable(
   ]
 );
 
-export const providerPointEntries = sqliteTable(
+export const legacyReliabilityEntries = sqliteTable(
   "provider_point_entries",
   {
     id: text("id").primaryKey(),
     accountId: text("account_id")
       .notNull()
-      .references(() => providerPointAccounts.id),
+      .references(() => legacyReliabilityAccounts.id),
     deltaPoints: integer("delta_points").notNull(),
     balanceAfterPoints: integer("balance_after_points").notNull(),
     reason: text("reason", {
@@ -553,6 +566,122 @@ export const providerPointEntries = sqliteTable(
       sql`${table.balanceAfterPoints} >= 0`
     ),
     index("provider_point_entries_account_idx").on(table.accountId, table.createdAt),
+  ]
+);
+
+export const walletCreditAccounts = sqliteTable(
+  "wallet_credit_accounts",
+  {
+    id: text("id").primaryKey(),
+    ownerType: text("owner_type", { enum: ["player", "provider"] }).notNull(),
+    ownerKey: text("owner_key").notNull(),
+    ownerUserId: text("owner_user_id").references(() => users.id),
+    providerId: text("provider_id").references(() => providerProfiles.id),
+    backingCurrency: text("backing_currency").notNull().default("TWD"),
+    availablePoints: integer("available_points").notNull().default(0),
+    heldPoints: integer("held_points").notNull().default(0),
+    pendingPoints: integer("pending_points").notNull().default(0),
+    redeemablePoints: integer("redeemable_points").notNull().default(0),
+    frozenPoints: integer("frozen_points").notNull().default(0),
+    lifetimeRedeemedPoints: integer("lifetime_redeemed_points").notNull().default(0),
+    status: text("status", { enum: ["active", "frozen", "closed"] })
+      .notNull()
+      .default("active"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("wallet_credit_accounts_owner_currency_idx").on(
+      table.ownerKey,
+      table.backingCurrency
+    ),
+    index("wallet_credit_accounts_user_idx").on(table.ownerUserId, table.status),
+    index("wallet_credit_accounts_provider_idx").on(table.providerId, table.status),
+    check("wallet_credit_accounts_available_nonnegative", sql`${table.availablePoints} >= 0`),
+    check("wallet_credit_accounts_held_nonnegative", sql`${table.heldPoints} >= 0`),
+    check("wallet_credit_accounts_pending_nonnegative", sql`${table.pendingPoints} >= 0`),
+    check("wallet_credit_accounts_redeemable_nonnegative", sql`${table.redeemablePoints} >= 0`),
+    check("wallet_credit_accounts_frozen_nonnegative", sql`${table.frozenPoints} >= 0`),
+    check(
+      "wallet_credit_accounts_lifetime_redeemed_nonnegative",
+      sql`${table.lifetimeRedeemedPoints} >= 0`
+    ),
+  ]
+);
+
+export const walletCreditEntries = sqliteTable(
+  "wallet_credit_entries",
+  {
+    id: text("id").primaryKey(),
+    accountId: text("account_id")
+      .notNull()
+      .references(() => walletCreditAccounts.id),
+    eventType: text("event_type", {
+      enum: [
+        "purchase",
+        "order_hold",
+        "order_hold_release",
+        "order_spend",
+        "provider_earning_pending",
+        "provider_earning_release",
+        "missed_offer_penalty",
+        "gift_purchase",
+        "gift_earning",
+        "redemption_requested",
+        "redemption_paid",
+        "dispute_freeze",
+        "dispute_release",
+        "refund",
+        "adjustment",
+        "reversal",
+      ],
+    }).notNull(),
+    pointsAmount: integer("points_amount").notNull(),
+    availableDeltaPoints: integer("available_delta_points").notNull().default(0),
+    heldDeltaPoints: integer("held_delta_points").notNull().default(0),
+    pendingDeltaPoints: integer("pending_delta_points").notNull().default(0),
+    redeemableDeltaPoints: integer("redeemable_delta_points").notNull().default(0),
+    frozenDeltaPoints: integer("frozen_delta_points").notNull().default(0),
+    availableAfterPoints: integer("available_after_points").notNull(),
+    heldAfterPoints: integer("held_after_points").notNull(),
+    pendingAfterPoints: integer("pending_after_points").notNull(),
+    redeemableAfterPoints: integer("redeemable_after_points").notNull(),
+    frozenAfterPoints: integer("frozen_after_points").notNull(),
+    twdValueMinor: integer("twd_value_minor").notNull(),
+    twdMinorPerPointSnapshot: integer("twd_minor_per_point_snapshot").notNull(),
+    referenceType: text("reference_type").notNull(),
+    referenceId: text("reference_id").notNull(),
+    idempotencyKey: text("idempotency_key").notNull(),
+    ruleVersion: text("rule_version"),
+    reason: text("reason").notNull(),
+    reversalOfEntryId: text("reversal_of_entry_id"),
+    createdAt: createdAt(),
+  },
+  (table) => [
+    uniqueIndex("wallet_credit_entries_idempotency_idx").on(table.idempotencyKey),
+    index("wallet_credit_entries_account_idx").on(table.accountId, table.createdAt),
+    index("wallet_credit_entries_reference_idx").on(
+      table.referenceType,
+      table.referenceId
+    ),
+    check("wallet_credit_entries_points_positive", sql`${table.pointsAmount} > 0`),
+    check("wallet_credit_entries_twd_value_nonnegative", sql`${table.twdValueMinor} >= 0`),
+    check(
+      "wallet_credit_entries_rate_positive",
+      sql`${table.twdMinorPerPointSnapshot} > 0`
+    ),
+    check(
+      "wallet_credit_entries_has_delta",
+      sql`${table.availableDeltaPoints} <> 0 OR ${table.heldDeltaPoints} <> 0 OR ${table.pendingDeltaPoints} <> 0 OR ${table.redeemableDeltaPoints} <> 0 OR ${table.frozenDeltaPoints} <> 0`
+    ),
+    check("wallet_credit_entries_available_nonnegative", sql`${table.availableAfterPoints} >= 0`),
+    check("wallet_credit_entries_held_nonnegative", sql`${table.heldAfterPoints} >= 0`),
+    check("wallet_credit_entries_pending_nonnegative", sql`${table.pendingAfterPoints} >= 0`),
+    check(
+      "wallet_credit_entries_redeemable_nonnegative",
+      sql`${table.redeemableAfterPoints} >= 0`
+    ),
+    check("wallet_credit_entries_frozen_nonnegative", sql`${table.frozenAfterPoints} >= 0`),
   ]
 );
 

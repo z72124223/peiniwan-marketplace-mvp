@@ -100,16 +100,17 @@ test("服務政策路由揭露 18+ 與禁止內容", async () => {
   assert.match(html, /未成年人參與/);
 });
 
-test("錢包頁只顯示清楚標示的示範帳務與非現金點數", async () => {
+test("錢包頁正確顯示台幣買點、逾時扣錢包與現金兌換", async () => {
   const response = await render("/wallet");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /帳務預覽・沒有真實款項/);
-  assert.match(html, /可提領/);
-  assert.match(html, /待入帳/);
-  assert.match(html, /爭議凍結/);
-  assert.match(html, /點數不是錢/);
-  assert.match(html, /不可購買、轉讓、提領、折抵/);
-  assert.match(html, /正式提領尚未開放/);
+  assert.match(html, /台幣買點/);
+  assert.match(html, /點數就是錢/);
+  assert.match(html, /直接扣除錢包裡可兌現的點數/);
+  assert.match(html, /點數可換現金/);
+  assert.match(html, /玩家保留點數全數返還/);
+  assert.match(html, /點數交易市場・尚未開放/);
+  assert.match(html, /真實兌現尚未接通/);
+  assert.doesNotMatch(html, /點數不是錢|不可購買、轉讓、提領、折抵/);
   assert.doesNotMatch(html, /\u0E40\u0E07\u0E34\u0E19/);
 });

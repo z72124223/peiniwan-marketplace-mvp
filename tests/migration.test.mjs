@@ -42,6 +42,8 @@ test("v0.2 migration applies with every required operational table", () => {
     "ledger_postings",
     "provider_point_accounts",
     "provider_point_entries",
+    "wallet_credit_accounts",
+    "wallet_credit_entries",
   ];
 
   const actualTables = database
@@ -122,6 +124,113 @@ test("wallet migration enforces immutable-ledger safety constraints", () => {
            values (?, ?, ?)`
         )
         .run("point-account-negative", provider.id, -1),
+    /CHECK constraint failed/
+  );
+
+  database
+    .prepare(
+      `insert into wallet_credit_accounts
+        (id, owner_type, owner_key, provider_id, backing_currency, redeemable_points)
+       values (?, ?, ?, ?, ?, ?)`
+    )
+    .run(
+      "wallet-provider-1",
+      "provider",
+      `provider:${provider.id}`,
+      provider.id,
+      "TWD",
+      20
+    );
+
+  assert.throws(
+    () =>
+      database
+        .prepare(
+          `insert into wallet_credit_accounts
+            (id, owner_type, owner_key, provider_id, backing_currency)
+           values (?, ?, ?, ?, ?)`
+        )
+        .run(
+          "wallet-provider-duplicate",
+          "provider",
+          `provider:${provider.id}`,
+          provider.id,
+          "TWD"
+        ),
+    /UNIQUE constraint failed/
+  );
+
+  assert.throws(
+    () =>
+      database
+        .prepare(
+          `insert into wallet_credit_accounts
+            (id, owner_type, owner_key, backing_currency, available_points)
+           values (?, ?, ?, ?, ?)`
+        )
+        .run("wallet-negative", "player", "player:negative", "TWD", -1),
+    /CHECK constraint failed/
+  );
+
+  database
+    .prepare(
+      `insert into wallet_credit_entries
+        (id, account_id, event_type, points_amount,
+         redeemable_delta_points, available_after_points, held_after_points,
+         pending_after_points, redeemable_after_points, frozen_after_points,
+         twd_value_minor, twd_minor_per_point_snapshot,
+         reference_type, reference_id, idempotency_key, rule_version, reason)
+       values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    )
+    .run(
+      "wallet-entry-penalty",
+      "wallet-provider-1",
+      "missed_offer_penalty",
+      5,
+      -5,
+      0,
+      0,
+      0,
+      15,
+      0,
+      500,
+      100,
+      "offer",
+      "offer-001",
+      "penalty:offer-001",
+      "missed-offer-v1",
+      "一分鐘內未接受邀請"
+    );
+
+  assert.throws(
+    () =>
+      database
+        .prepare(
+          `insert into wallet_credit_entries
+            (id, account_id, event_type, points_amount,
+             available_after_points, held_after_points, pending_after_points,
+             redeemable_after_points, frozen_after_points,
+             twd_value_minor, twd_minor_per_point_snapshot,
+             reference_type, reference_id, idempotency_key, reason)
+           values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        )
+        .run(
+          "wallet-entry-no-delta",
+          "wallet-provider-1",
+          "adjustment",
+          1,
+          0,
+          0,
+          0,
+          15,
+          0,
+          100,
+          100,
+          "manual",
+          "manual-001",
+          "manual:no-delta",
+          "invalid"
+        ),
     /CHECK constraint failed/
   );
 });
