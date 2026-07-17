@@ -20,6 +20,7 @@
 }
 
 html {
+  overflow-x: clip;
   scroll-behavior: smooth;
 }
 
