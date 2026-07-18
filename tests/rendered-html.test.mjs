@@ -53,6 +53,7 @@ test("首頁會渲染正式 MVP 內容，不含 starter 佔位畫面", async () 
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
   const html = await response.text();
+  assert.match(html, /<body class="wolf-theme">/);
   assert.match(html, /今晚，找到/);
   assert.match(html, /懂你節奏/);
   assert.match(html, /狼群首頁/);
@@ -62,6 +63,13 @@ test("首頁會渲染正式 MVP 內容，不含 starter 佔位畫面", async () 
   assert.match(html, /目前是示範網站/);
   assert.doesNotMatch(html, /站長在線|現在可接|href="\/owner"/);
   assert.doesNotMatch(html, /Codex is working|Your site is taking shape|react-loading-skeleton/i);
+
+  const campfireStyleReference = await render("/voice-room-wolf-campfire.png");
+  assert.equal(campfireStyleReference.status, 200);
+  assert.match(
+    campfireStyleReference.headers.get("content-type") ?? "",
+    /^image\/png\b/i,
+  );
 });
 
 test("陪玩師卡片的評價數可進入評價列表", async () => {

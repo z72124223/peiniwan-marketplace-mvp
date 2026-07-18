@@ -1,5 +1,293 @@
 # Plan
 
+## Completed Plan Window — v0.10 Voice Room Cancellation Cleanup
+
+### Goal
+
+完整撤回語音房頁面與系統計畫，同時保留狼群營火圖片、永久視覺規範與已統一的全站狼群風格。
+
+### Global Strategy
+
+1. 移除 `/voice-room` 路由、語音房 React 元件、WebRTC、WebSocket、Durable Object 與其專用測試／設定。
+2. 從 `app/globals.css` 只移除語音房專用介面樣式，保留 `Wolf campfire visual system v1` 以下的全站主題規則。
+3. 保留 `public/voice-room-wolf-campfire.png` 與 `docs/VISUAL_STYLE_GUIDE.md`，其他頁面繼續使用其色彩、材質與低對比背景。
+4. 不回退首頁愛將圖片、全站品牌或其他既有功能。
+
+### Non-Goals
+
+- 不重新設計或生成狼群營火圖片。
+- 不移除全站狼群風格，也不恢復舊的米白／暖棕介面。
+- 不修改首頁、訂單、付款、邀請、登入或公開部署狀態。
+
+### Scope
+
+- 刪除語音房路由、元件、訊號協定與 Worker 房間類別。
+- 還原 Cloudflare Durable Object 綁定、測試腳本與語音房渲染測試。
+- 移除語音房專用 CSS，保留視覺基準資產與全站主題 CSS。
+- 更新計畫狀態並執行完整品質檢查。
+
+### Confirmed Facts
+
+- 使用者明確要求取消語音房計畫，但保留圖片與風格。
+- 狼群營火圖片位於 `public/voice-room-wolf-campfire.png`，也是 `docs/VISUAL_STYLE_GUIDE.md` 指定的全站視覺基準。
+- 語音房路由、元件、訊號協定與 Durable Object 都是目前尚未提交的獨立變更，可在不影響其他功能的情況下移除。
+- 全站主題規則位於語音房專用 CSS 區塊之後，仍引用同一張營火圖片作為非首頁低對比背景。
+
+### Assumptions
+
+- 「取消語音房」表示頁面入口與底層功能都不要保留，不只是暫停 WebRTC 串接。
+
+### Open Questions
+
+- 無阻擋問題。
+
+### Implementation Steps
+
+- [x] Step 52：移除語音房頁面、系統、專用樣式、設定與測試，保留圖片及全站風格。
+- [x] Step 53：執行完整測試、lint、typecheck、production build、差異檢查與代表頁面視覺確認。
+
+### Verification
+
+- Step 52：專案中不再存在 `/voice-room` 路由、語音房元件、WebRTC／WebSocket／Durable Object 語音程式或專用 CSS；營火圖片與視覺規範仍存在，全站主題仍引用該圖片。
+- Step 53：`npm test`、`npm run lint`、`npm run typecheck`、production build 與 `git diff --check` 通過；首頁仍使用愛將圖片，其他代表頁面仍保持狼群營火風格。
+
+### Risks
+
+- `app/globals.css` 同時包含語音房專用區塊與後續全站主題，清理時必須以明確註解邊界切除，避免誤刪全站風格。
+
+### Drift Log
+
+- 2026-07-19：使用者取消語音房計畫，明確要求只保留圖片與風格。停止 v0.9 實作與瀏覽器驗證，新增精準撤回窗口；不回退 v0.8 全站視覺系統。
+- 2026-07-19：Step 52 完成。刪除 `/voice-room` 路由、語音元件、共用訊號協定、Durable Object、Cloudflare 綁定、專用測試及專用 CSS；移除空路由資料夾與全站主題中的舊排除條件。`public/voice-room-wolf-campfire.png`、`docs/VISUAL_STYLE_GUIDE.md`、首頁愛將例外及非首頁營火背景規則均保留。
+- 2026-07-19：Step 53 完成。完整 `npm test` 通過（6 migration、27 領域、7 rendered HTML），lint、typecheck、production build 與 `git diff --check` 通過。正式路由清單及本機 HTTP 都確認 `/voice-room` 為 404；營火圖片回應 200、`image/png`、2,129,048 bytes。取消範圍無漂移，圖片與全站風格均保留，狀態可封存。
+
+## Cancelled Plan Window — v0.9 Functional Voice Room
+
+> 2026-07-19 依使用者指示取消。以下僅保留歷史決策，不再執行；相關程式由 v0.10 清理。
+
+### Goal
+
+讓獨立 `/voice-room` 成為可實際多人通話的最小語音房：進入者可授權麥克風、彼此收聽、靜音、離開，並讓任何正在說話的人（包含自己）顯示動態狀態；首頁暫時不新增語音房入口。
+
+### Global Strategy
+
+1. 沿用現有 Cloudflare Worker，以 Durable Object（具房間狀態的即時服務）與 WebSocket（雙向訊號連線）建立每房訊號中樞。
+2. 前端以 WebRTC（瀏覽器即時語音）建立小型房間的點對點音訊網狀連線；媒體留在通話成員之間，訊號中樞不錄音、不保存音訊。
+3. 由真實連線狀態產生成員清單與人數，不限制房間人數、不再顯示示意成員、固定上限、冒險時段或假倒數。
+4. 以 Web Audio API（瀏覽器音訊分析介面）分析每條本機／遠端音軌，讓實際正在說話的成員顯示動態圖標。
+5. `/voice-room` 保持獨立可測入口；不修改首頁、訂單、付款、邀請或登入流程。
+
+### Non-Goals
+
+- 不在首頁或全站導覽新增語音房連結。
+- 不把示意訂單接上正式訂單成立事件、會員身份或房間授權。
+- 不錄音、不轉錄、不保存音訊，也不加入視訊、文字聊天、主持人管理或踢人功能。
+- 不公開部署，也不自動建立 Cloudflare TURN 帳號、金鑰或費用設定。
+
+### Scope
+
+- 新增 Durable Object 房間訊號服務與本機 Cloudflare 綁定。
+- 新增可測的語音房訊號協定與 WebRTC 前端連線邏輯。
+- 更新 `components/voice-room-demo.tsx` 與語音房樣式，使控制與狀態反映真實裝置／連線。
+- 移除固定時段、假倒數、假成員與 `3 / 4` 上限，只顯示實際房內人數。
+- 補上協定、渲染與雙分頁瀏覽器驗證。
+
+### Confirmed Facts
+
+- 使用者已澄清：「先不要串連」只指暫時不與首頁連結；語音系統本身要先完成串連。
+- 使用者要求不限制人數，只顯示房間目前有幾個人，並移除冒險時段。
+- 使用者要求自己或其他人說話時，都能顯示相同類型的說話圖標。
+- 目前 `/voice-room` 的麥克風、聲音、成員與說話狀態全是 React 本機示意，沒有呼叫 `getUserMedia`、WebRTC、WebSocket 或任何語音服務。
+- 專案使用 Vinext／React 與 Cloudflare Vite plugin；`worker/index.ts` 是現有 Worker 入口，但目前沒有 Durable Object 綁定。
+- 目前沒有登入與正式訂單授權，因此本輪無法安全地把房間存取綁定到真實買賣雙方。
+- Cloudflare 官方文件確認 Durable Object 可用 WebSocket Hibernation（休眠式長連線）協調房間；新命名空間應使用 SQLite 儲存後端。
+
+### Assumptions
+
+- 本輪以小型訂單語音房為目標，採 WebRTC 點對點網狀連線；若未來房間經常超過約 6–8 人，再評估 SFU（選擇性轉送伺服器）。
+- 在尚無登入與訂單資料時，以網址中的房間 ID 與顯示名稱完成技術驗證；這不是正式授權機制。
+- 預設使用 Cloudflare 公開 STUN（網路位址探索）服務；同機、本機網路與多數一般網路可連，嚴格 NAT／防火牆環境需日後配置短效 TURN 憑證。
+
+### Open Questions
+
+- 正式房間 ID、加入者身份與存取權限要等訂單／登入路徑確定後才能綁定；本輪不阻擋獨立語音系統驗證。
+- 正式部署前需決定是否使用 Cloudflare Realtime TURN 或 SFU，並完成帳號側金鑰與費用設定。
+
+### Implementation Steps
+
+- [x] Step 49：建立並測試 Durable Object 房間訊號中樞與訊號協定。
+- [ ] Cancelled — Step 50：接上真實麥克風、WebRTC 遠端音訊、靜音／離開、動態成員人數與逐人說話偵測；同步移除固定時段、假倒數及人數上限。
+- [ ] Cancelled — Step 51：執行完整測試、建置與差異檢查，並以兩個瀏覽器分頁驗證加入、互見、說話標示、靜音與離開；回寫限制與漂移紀錄。
+
+### Verification
+
+- Step 49：訊號協定測試涵蓋房間／參與者 ID 驗證、歡迎、加入、離開與只向指定對象轉送；本機 Worker 能接受 `/api/voice-signal/:roomId` WebSocket 升級。
+- Step 50：第一次操作會實際要求麥克風權限；兩位以上成員可互收音訊；麥克風按鈕切換送出的 track、房間聲音按鈕切換遠端 audio、離開會關閉音軌與連線；成員數無上限格式，且真實說話者逐人標示。
+- Step 51：`npm test`、`npm run lint`、`npm run typecheck`、production build 與 `git diff --check` 通過；兩個分頁同房可互見與交換 WebRTC 狀態，窄螢幕無水平溢位，首頁不存在 `/voice-room` 入口。
+
+### Risks
+
+- 瀏覽器必須由使用者操作後授權麥克風；拒絕權限時需保留清楚且可重試的錯誤狀態。
+- 單靠 STUN 無法穿越所有 NAT／公司防火牆；未配置 TURN 前不能宣稱所有跨網路環境皆可通話。
+- 點對點網狀連線的上傳與 CPU 成本隨人數增加；介面雖不設硬上限，正式大型房仍應改採 SFU。
+- 本輪沒有正式身份與訂單授權，知道房間 ID 的人可加入本機示範房；不可公開當作生產安全房間。
+
+### Drift Log
+
+- 2026-07-19：使用者澄清原先「先不要串連」只指不連首頁，語音系統本身要實際串連。v0.7 的本機預覽邊界因此失效，新增 v0.9 功能窗口；保留獨立路由與不連首頁邊界，改以 Durable Object＋WebRTC 完成可驗證的多人語音。
+- 2026-07-19：Step 49 完成。新增共用訊號協定與 `VoiceRoom` Durable Object，WebSocket 會回報同房成員加入／離開並只向指定對象轉送 WebRTC description／ICE candidate；Vite 本機綁定採 SQLite Durable Object。3 項協定測試、lint、typecheck、production build 與差異檢查通過，未修改首頁或訂單流程。
+
+## Current Plan Window — v0.8 Wolf Campfire Visual System
+
+### Goal
+
+將 `public/voice-room-wolf-campfire.png` 定為未來全站的視覺基準，保留首頁愛將主圖不變，並統一其餘前端介面的色彩、材質、排版、表面與狀態語言。
+
+### Global Strategy
+
+1. 將狼群營火圖萃取為可重複使用的設計語彙：深夜森林、月光藍、營火橘、松林綠、柔和童話質感與冒險隊伍感。
+2. 建立一份永久 `docs/VISUAL_STYLE_GUIDE.md`，明列基準圖、首頁例外、色彩 token（設計變數）、元件規則與禁止事項。
+3. 以 `app/globals.css` 的全域 token 與共用表面規則統一 Header、Footer、按鈕、卡片、表單、狀態、政策、評價、錢包與 Live Demo，避免逐頁複製樣式。
+4. 非首頁頁面可使用低對比的營火森林氛圍層；首頁繼續使用 `hero-husky-night.webp`，不替換、不重生成、不以營火圖覆蓋愛將。
+5. 不改 React 資料流、API、表單送出、訂單、付款或路由行為；本輪只改視覺系統與可驗證的標記。
+
+### Non-Goals
+
+- 不替換首頁愛將圖片，也不改其構圖與人物前景拼貼。
+- 不把陪玩師真人照片改成狼或插畫角色。
+- 不新增前端套件、不重構功能元件、不修改資料庫或 API。
+- 不串接語音房、訂單、付款或身份驗證。
+- 不公開部署。
+
+### Scope
+
+- 新增 `docs/VISUAL_STYLE_GUIDE.md` 作為未來設計基準。
+- 更新 `app/layout.tsx`，加入明確的全站主題標記。
+- 更新 `app/globals.css` 的全域 token、共用元件與各主要頁面表面樣式。
+- 更新最小 rendered HTML 測試，鎖定主題標記與首頁愛將例外。
+- 驗證首頁、探索、表單、政策、錢包、評價、Live Demo 與語音房的代表畫面。
+
+### Confirmed Facts
+
+- 使用者明確指定狼群圍火堆圖為未來風格基調版。
+- 使用者明確要求：首頁愛將圖片保留，其他地方使用此風格並統一前端介面。
+- 狼群營火圖已保存為 `public/voice-room-wolf-campfire.png`；畫面包含深藍森林、月光、暖橘營火、松林與可愛狼群。
+- 首頁愛將主圖目前為 `public/hero-husky-night.webp`，由 `app/page.tsx` 獨立引用。
+- 全站主要樣式集中在 `app/globals.css`，但仍存在冰藍主色、暖棕材質、米白政策／表單卡片與多套陰影規則。
+- Header、Footer、卡片、表單與多數頁面已使用穩定 class，可透過共用 CSS 統一而不改功能元件。
+- 目前工作樹包含上一輪語音房與測試差異；本輪在其上延續，不刪除或回退。
+
+### Assumptions
+
+- 「使用這種風格」指介面視覺語彙與低對比氣氛背景，不代表每一頁都要重複完整狼群營火主圖。
+- 安全、錯誤與成功狀態仍可使用紅／綠語意色，但材質與明度需融入深夜森林系統。
+
+### Open Questions
+
+- 無阻擋問題；若日後要為各遊戲建立獨立插畫，可在本基準下另開資產製作窗口。
+
+### Implementation Steps
+
+- [x] Step 45：更新本計畫，鎖定視覺基準、首頁愛將例外與功能邊界。
+- [x] Step 46：建立永久視覺規範，更新全域主題標記與設計 token。
+- [x] Step 47：統一共用元件及主要頁面表面，保留語意狀態差異與首頁主圖。
+- [x] Step 48：更新最小測試，執行 lint、typecheck、完整 build／tests、差異檢查與代表路由桌面／手機驗收。
+
+### Verification
+
+- Step 46：規範檔明列基準圖與首頁例外；HTML body 具有主題標記；全域 token 可直接對應營火圖的月光、營火與松林色。
+- Step 47：主要路由不再出現突兀米白表面；Header、Footer、按鈕、表單與面板使用同一材質／邊框／陰影系統；首頁仍載入 `hero-husky-night.webp`。
+- Step 48：`npm test`、`npm run lint`、`npm run typecheck`、production build 與 `git diff --check` 通過；代表路由在桌面與約 390px 手機寬度無水平溢位、可讀性問題或瀏覽器錯誤。
+
+### Risks
+
+- `app/globals.css` 歷史樣式較長，新增共用覆寫需保持選擇器範圍清楚，避免語意狀態被全域表面規則蓋掉。
+- 營火橘若使用過量會變成一般暖棕網站；需把它限制為焦點、操作與引導色，主體仍以深藍夜色為主。
+- 背景圖若過亮會影響閱讀與效能；非首頁只採低透明氣氛層，不重複當成大幅內容圖。
+
+### Drift Log
+
+- 2026-07-19：使用者將狼群營火圖指定為未來風格基準，並要求保留首頁愛將圖片。新增 v0.8 視覺系統窗口，範圍限定設計規範、全域 token、共用表面與視覺驗收；不觸及功能、資料或部署。
+- 2026-07-19：Step 45 完成。已確認首頁愛將資產為獨立引用，並盤點主要路由、共用元件與歷史米白／暖棕／冰藍樣式；後續以共用 CSS 收斂，不改功能元件資料流。
+- 2026-07-19：Step 46 完成。新增 `docs/VISUAL_STYLE_GUIDE.md`，明列營火基準圖、首頁愛將例外、色彩、材質、排版、元件、背景與禁止事項；`body.wolf-theme` 與月光／營火／松林 token 已建立。型別與差異檢查通過，首頁仍明確引用 `hero-husky-night.webp`。
+- 2026-07-19：Step 47 完成。以共用樣式統一 Header／Footer、按鈕、文字連結、表單、篩選、陪玩師卡、政策、Owner、評價、錢包、Live Demo 與語意狀態；非首頁／非語音房路由加入低對比營火森林背景，首頁愛將主圖未變。lint、typecheck、production build 與差異檢查通過。
+- 2026-07-19：Step 48 完成。完整 `npm test` 通過（6 migration、27 領域、8 rendered HTML），lint、typecheck、production build 與 `git diff --check` 通過。瀏覽器確認首頁仍載入 `hero-husky-night.webp` 且未載入營火背景；探索、申請、政策、錢包、評價與語音房的目標表面皆使用新 token，非首頁路由載入低對比營火背景。首頁、探索、申請、政策、錢包、評價、語音房、Live Demo 共 8 個代表路由在 392px 均無水平溢位，瀏覽器錯誤為 0。Live Demo 在本機瀏覽器停留於既有安全錯誤狀態，因此本輪驗證到其載入／錯誤表面；其領域測試與 rendered HTML 邊界仍全部通過。本輪無功能或架構漂移。
+
+## Cancelled Plan Window — v0.7 Order Voice Room Visual Prototype
+
+> 2026-07-19 依使用者指示取消語音房；圖片與由此建立的全站視覺風格移交 v0.8 保留。
+
+### Goal
+
+建立一個訂單成立後可進入的獨立語音房介面原型：功能保持簡潔，視覺以深色、可愛狼群與冒險營火氛圍為核心。
+
+### Global Strategy
+
+1. 新增獨立 `/voice-room` 路由，避免修改或假裝已串接現有訂單、付款、邀請與資料流程。
+2. 以「一群狼背對觀者、面向中央火堆、圍成一圈」的專屬桌布建立房間氛圍，採深藍森林與暖橘營火的冷暖對比。
+3. 介面只保留語音房必要資訊：房間／訂單狀態、同行成員、麥克風、聲音與離開控制。
+4. 所有互動只存在瀏覽器本機狀態，不呼叫 API、不啟用麥克風、不建立即時連線。
+
+### Non-Goals
+
+- 不串接訂單成立事件、會員登入、房間權限或資料庫。
+- 不串接 WebRTC（瀏覽器即時通訊）、第三方語音服務或真正的裝置麥克風。
+- 不處理付款、計時扣款、檢舉、錄音或公開部署。
+- 不重構現有首頁、Live Demo、錢包或陪玩師資料。
+
+### Scope
+
+- 產生並保存一張狼群圍著火堆的深色桌布至 `public/`。
+- 新增 `app/voice-room/page.tsx`。
+- 新增 `components/voice-room-demo.tsx`，提供本機可切換的麥克風與聲音狀態。
+- 在 `app/globals.css` 新增語音房專用樣式與響應式版面。
+- 補上最小 rendered HTML（渲染後 HTML）檢查並完成建置與視覺驗證。
+
+### Confirmed Facts
+
+- 使用者明確要求：訂單成立後玩家進入此房間、先不要串連、功能簡潔。
+- 使用者指定風格為狼群、可愛一些、深色系、有冒險感。
+- 使用者進一步指定桌布構圖：一群狼面向火堆並圍成一圈。
+- 專案目前使用 Next.js／React，已有全站深色 token 與獨立路由慣例。
+- 目前套件沒有圖示函式庫，因此房間控制需使用小型內嵌 SVG（向量圖）或既有 CSS，不新增依賴。
+- 目前工作樹已有首頁品牌改版差異；本輪保留並避免覆寫那些變更。
+
+### Assumptions
+
+- 語音房先以 3 位成員的示意訂單呈現，讓使用者能直接判斷版面與氛圍。
+- 桌布不含文字、Logo 或 UI，避免生成文字錯誤，也保留介面可讀性。
+
+### Open Questions
+
+- 無阻擋問題；房間串接方式、正式成員資料與訂單欄位留到使用者確認此版視覺後再規劃。
+
+### Implementation Steps
+
+- [x] Step 41：更新本計畫，凍結不串接邊界與狼群營火構圖。
+- [x] Step 42：生成、保存並目視檢查狼群圍火堆桌布。
+- [x] Step 43：實作獨立語音房頁面、簡潔本機控制與響應式樣式。
+- [x] Step 44：補最小測試，執行 lint、typecheck、build、git diff 檢查與桌面／手機視覺驗證。
+
+### Verification
+
+- Step 42：圖片中清楚可見多隻狼共同面向中央火堆並圍成一圈；整體為深色可愛冒險風，且沒有文字、Logo、浮水印或介面。
+- Step 43：`/voice-room` 可載入；麥克風與聲音按鈕可切換本機顯示狀態；離開按鈕只顯示本機確認狀態，不跳轉也不送出請求。
+- Step 44：`npm run lint`、`npm run typecheck`、`npm run build`、相關測試與 `git diff --check` 通過；桌面與 390px 手機寬度沒有水平溢位或控制列遮擋。
+
+### Risks
+
+- 背景細節過亮會降低 UI 可讀性，需以遮罩與局部漸層控制對比。
+- 圓形成員構圖在窄螢幕容易擁擠，手機版應改用較小軌道與精簡資訊。
+- 本機切換若沒有清楚標示，可能被誤認為真實語音功能；頁面必須持續顯示「介面預覽／尚未連線」。
+
+### Drift Log
+
+- 2026-07-19：使用者提出訂單後語音房，並明確要求先不串連。新增 v0.7 視覺原型窗口，範圍限定獨立路由、生成桌布與本機互動；不觸及訂單、付款、資料或部署。
+- 2026-07-19：Step 41 完成。已將「狼群背對觀者、共同面向中央火堆並圍成一圈」寫入生成規格，並明列所有控制僅為本機介面預覽。
+- 2026-07-19：Step 42 完成。使用內建 imagegen 生成 1672×941 桌布，7 隻可愛長毛狼共同面向中央火堆並形成清楚圓環；保存為 `public/voice-room-wolf-campfire.png`，目視確認無文字、Logo、浮水印或 UI。
+- 2026-07-19：Step 43 完成。新增 `/voice-room` 與本機互動元件；頁面包含隊伍、示意訂單、冒險時段、麥克風／聲音／離開控制，並持續揭露「介面預覽・尚未連線」。`npm run typecheck` 與 `npm run lint` 通過。
+- 2026-07-19：Step 44 完成。完整 `npm test` 通過（6 migration、27 領域、8 rendered HTML），`npm run lint`、`npm run typecheck`、production build 與 `git diff --check` 通過。瀏覽器驗證寬螢幕為主畫面＋330px 隊伍欄，392px 手機版 `scrollWidth === innerWidth`、桌布與控制列皆在頁面內；麥克風、聲音與離開控制已實際點擊，狀態文字正確且瀏覽器錯誤為 0。桌面畫面已目視確認；手機截圖工具逾時，改以實際 DOM 尺寸與零溢位數值完成驗證。本輪無功能或架構漂移，仍維持不串接邊界。
+
 ## Current Plan Window — v0.6 Homepage Dark Pet Visual Refresh
 
 ### Goal

@@ -2,17 +2,23 @@
 
 :root {
   color-scheme: dark;
-  --ink: #f4f8fb;
-  --ink-soft: #a8b4c0;
-  --paper: #05070d;
-  --paper-deep: #080b12;
-  --card: #101722;
-  --line: #273546;
-  --accent: #75c8ff;
-  --accent-dark: #3f8dcc;
-  --green: #66bd8c;
-  --sand: #7b92aa;
-  --shadow: 0 24px 72px rgba(0, 0, 0, 0.42);
+  --ink: #f4f7fb;
+  --ink-soft: #9db0c1;
+  --paper: #03070e;
+  --paper-deep: #060c14;
+  --card: #0b1420;
+  --card-strong: #101d2b;
+  --line: #203246;
+  --line-bright: #34516d;
+  --accent: #f2ad5d;
+  --accent-dark: #c47a35;
+  --moon: #8ebddb;
+  --green: #73d3a0;
+  --danger: #ff9a8f;
+  --sand: #7e96ac;
+  --surface: rgba(7, 14, 23, 0.9);
+  --surface-soft: rgba(11, 20, 32, 0.78);
+  --shadow: 0 24px 72px rgba(0, 0, 0, 0.46);
 }
 
 * {
@@ -27,8 +33,8 @@ body {
   margin: 0;
   background-color: var(--paper);
   background-image:
-    radial-gradient(circle at 16% -8%, rgba(117, 200, 255, 0.12), transparent 30rem),
-    radial-gradient(circle at 84% 18%, rgba(128, 137, 255, 0.07), transparent 26rem),
+    radial-gradient(circle at 16% -8%, rgba(142, 189, 219, 0.13), transparent 30rem),
+    radial-gradient(circle at 82% 14%, rgba(242, 173, 93, 0.07), transparent 25rem),
     repeating-linear-gradient(118deg, rgba(255, 255, 255, 0.012) 0 1px, transparent 1px 6px);
   background-attachment: fixed;
   color: var(--ink);
@@ -71,8 +77,8 @@ textarea:focus-visible {
   position: sticky;
   z-index: 50;
   top: 0;
-  border-bottom: 1px solid rgba(117, 200, 255, 0.14);
-  background: rgba(5, 7, 13, 0.9);
+  border-bottom: 1px solid rgba(142, 189, 219, 0.14);
+  background: rgba(3, 7, 14, 0.88);
   backdrop-filter: blur(18px);
 }
 
@@ -141,8 +147,8 @@ textarea:focus-visible {
 
 .button-primary {
   background: var(--accent);
-  color: white;
-  box-shadow: 0 12px 28px rgba(198, 91, 60, 0.22);
+  color: #1a1008;
+  box-shadow: 0 12px 30px rgba(242, 173, 93, 0.18);
 }
 
 .button-primary:hover {
@@ -159,8 +165,8 @@ textarea:focus-visible {
 }
 
 .button-dark {
-  border: 1px solid rgba(117, 200, 255, 0.12);
-  background: #101925;
+  border: 1px solid rgba(142, 189, 219, 0.18);
+  background: rgba(16, 29, 43, 0.88);
   color: var(--ink);
 }
 
@@ -189,7 +195,7 @@ textarea:focus-visible {
 }
 
 .eyebrow-light {
-  color: #e9b49f;
+  color: #f3c486;
 }
 
 .hero {
@@ -4531,5 +4537,359 @@ textarea:focus-visible {
 
   .live-history-list article {
     align-items: flex-start;
+  }
+}
+
+/* Wolf campfire visual system v1 — see docs/VISUAL_STYLE_GUIDE.md */
+body.wolf-theme:not(:has(.home-main)) {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(180deg, rgba(3, 7, 14, 0.91), rgba(3, 7, 14, 0.98) 72%),
+    radial-gradient(circle at 50% 20%, rgba(242, 173, 93, 0.12), transparent 32rem),
+    url("/voice-room-wolf-campfire.png");
+  background-position: center, center, center top;
+  background-size: auto, auto, cover;
+  background-attachment: fixed;
+}
+
+.site-header,
+.site-footer {
+  border-color: rgba(142, 189, 219, 0.14);
+  background-color: rgba(3, 7, 14, 0.9);
+  background-image:
+    linear-gradient(110deg, rgba(142, 189, 219, 0.035), transparent 32%),
+    repeating-linear-gradient(118deg, rgba(255, 255, 255, 0.008) 0 1px, transparent 1px 6px);
+}
+
+.button {
+  letter-spacing: 0.01em;
+}
+
+.button-primary:hover {
+  background: var(--accent-dark);
+  color: #fff3e5;
+}
+
+.button-secondary,
+.button-dark,
+.button-quiet {
+  border-color: rgba(142, 189, 219, 0.18);
+  background: rgba(16, 29, 43, 0.76);
+  color: var(--ink);
+}
+
+.button-secondary:hover,
+.button-dark:hover,
+.button-quiet:hover {
+  border-color: rgba(142, 189, 219, 0.48);
+  background: rgba(20, 37, 54, 0.94);
+}
+
+.text-link,
+.review-count-link,
+.profile-review-link,
+.back-link {
+  color: var(--accent);
+}
+
+.review-count-link,
+.profile-review-link {
+  text-decoration-color: rgba(242, 173, 93, 0.34);
+}
+
+.review-count-link:hover,
+.profile-review-link:hover,
+.text-link:hover,
+.back-link:hover {
+  color: #ffd198;
+}
+
+.need-card,
+.provider-card,
+.filter-panel,
+.booking-card,
+.score-panel,
+.detail-panel,
+.product-form,
+.form-page-promise,
+.owner-promise-card,
+.form-aside > div,
+.owner-security-banner,
+.owner-kpi-grid article,
+.owner-main-panel,
+.owner-audit-panel,
+.owner-queue-card,
+.owner-notice,
+.policy-draft-note,
+.policy-card,
+.policy-cta,
+.policy-boundaries article,
+.reviews-hero,
+.review-card,
+.reviews-cta,
+.wallet-demo-notice,
+.wallet-money-card,
+.wallet-money-model,
+.wallet-ledger-panel,
+.wallet-rule-panel,
+.wallet-flow,
+.live-demo-banner,
+.live-wallet-strip,
+.live-panel,
+.live-loading {
+  border-color: rgba(142, 189, 219, 0.16);
+  background-color: rgba(7, 14, 23, 0.91);
+  background-image:
+    linear-gradient(145deg, rgba(142, 189, 219, 0.045), transparent 36%),
+    radial-gradient(circle at 88% 0, rgba(242, 173, 93, 0.055), transparent 19rem),
+    repeating-linear-gradient(128deg, rgba(255, 255, 255, 0.008) 0 1px, transparent 1px 6px);
+  box-shadow: var(--shadow);
+}
+
+.need-card:hover,
+.provider-card:hover,
+.choice-card:hover,
+.game-pill:hover {
+  border-color: rgba(242, 173, 93, 0.42);
+}
+
+.form-section,
+.live-panel-heading,
+.wallet-section-heading,
+.owner-tabs,
+.owner-boundary-list,
+.wallet-entry,
+.live-shift-row,
+.live-history-list article {
+  border-color: rgba(142, 189, 219, 0.13);
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea,
+.filter-row select,
+.choice-card {
+  border-color: rgba(142, 189, 219, 0.17);
+  background: rgba(4, 10, 18, 0.88);
+  color: var(--ink);
+}
+
+.form-grid input:hover,
+.form-grid select:hover,
+.form-grid textarea:hover,
+.filter-row select:hover,
+.choice-card:hover {
+  border-color: rgba(142, 189, 219, 0.38);
+}
+
+.form-grid input:focus,
+.form-grid select:focus,
+.form-grid textarea:focus,
+.filter-row select:focus {
+  border-color: var(--accent);
+  outline-color: rgba(242, 173, 93, 0.2);
+}
+
+.form-grid input::placeholder,
+.form-grid textarea::placeholder {
+  color: #657a8e;
+}
+
+.choice-card:has(input:checked) {
+  border-color: rgba(242, 173, 93, 0.7);
+  background: rgba(74, 45, 20, 0.34);
+  box-shadow: inset 0 0 0 1px rgba(242, 173, 93, 0.08);
+}
+
+.demo-mark,
+.steps-list > li > span,
+.filter-chips button.active,
+.form-section-heading > span,
+.need-number {
+  background: rgba(242, 173, 93, 0.14);
+  color: var(--accent);
+}
+
+.filter-chips button,
+.game-pill,
+.status-badge,
+.axis-badge,
+.risk,
+.status-pill,
+.review-score-label,
+.review-sub-scores span,
+.wallet-trade-locks span {
+  border-color: rgba(142, 189, 219, 0.16);
+  background-color: rgba(16, 29, 43, 0.78);
+}
+
+.provider-photo,
+.profile-photo-large,
+.reviews-provider img,
+.live-provider-card > img {
+  border-color: rgba(142, 189, 219, 0.19);
+  filter: saturate(0.78) contrast(1.04) brightness(0.92);
+}
+
+.form-error,
+.form-aside .aside-warning,
+.owner-security-banner,
+.policy-draft-note,
+.policy-card-blocked,
+.wallet-rule-panel,
+.wallet-penalty-example {
+  border-color: rgba(255, 154, 143, 0.28);
+  background-color: rgba(45, 18, 20, 0.84);
+  background-image:
+    linear-gradient(140deg, rgba(255, 154, 143, 0.075), transparent 58%),
+    repeating-linear-gradient(128deg, rgba(255, 255, 255, 0.006) 0 1px, transparent 1px 6px);
+  color: #ffd5d0;
+}
+
+.field-error,
+.risk-中,
+.risk-高,
+.wallet-entry-value strong.is-negative {
+  color: var(--danger);
+}
+
+.form-aside .aside-note,
+.policy-card-allowed,
+.wallet-redemption-panel,
+.status-pill,
+.form-success {
+  border-color: rgba(115, 211, 160, 0.24);
+  background-color: rgba(8, 30, 24, 0.8);
+  background-image:
+    linear-gradient(140deg, rgba(115, 211, 160, 0.075), transparent 58%),
+    repeating-linear-gradient(128deg, rgba(255, 255, 255, 0.006) 0 1px, transparent 1px 6px);
+}
+
+.aside-warning p,
+.policy-draft-note,
+.owner-security-banner p {
+  color: #e9b8b1;
+}
+
+.aside-note p,
+.policy-card-allowed,
+.wallet-redemption-panel {
+  color: #d7f0e2;
+}
+
+.safety-section,
+.profile-boundary,
+.policy-cta,
+.owner-kpi-grid .owner-kpi-accent {
+  border-color: rgba(142, 189, 219, 0.14);
+  background-color: #050b13;
+  background-image:
+    radial-gradient(circle at 16% 18%, rgba(242, 173, 93, 0.09), transparent 28rem),
+    radial-gradient(circle at 82% 30%, rgba(142, 189, 219, 0.07), transparent 26rem),
+    repeating-linear-gradient(120deg, rgba(255, 255, 255, 0.009) 0 1px, transparent 1px 6px);
+}
+
+.live-demo-banner,
+.wallet-demo-notice,
+.preferred-provider {
+  border-color: rgba(242, 173, 93, 0.24);
+  background-color: rgba(29, 20, 13, 0.82);
+  background-image: linear-gradient(100deg, rgba(242, 173, 93, 0.09), transparent 55%);
+}
+
+.live-provider-card,
+.owner-tabs,
+.owner-audit-list article,
+.owner-empty-audit,
+.wallet-entry-value > span[data-status],
+.wallet-money-model,
+.wallet-flow li {
+  border-color: rgba(142, 189, 219, 0.13);
+  background-color: rgba(5, 11, 19, 0.78);
+}
+
+.owner-tabs button.is-active {
+  background: rgba(16, 29, 43, 0.9);
+  color: var(--accent);
+}
+
+.reviewer-avatar,
+.wallet-demo-notice > span,
+.wallet-section-heading > span {
+  border-color: rgba(242, 173, 93, 0.32);
+  background: rgba(74, 45, 20, 0.46);
+  color: var(--accent);
+}
+
+.reviews-hero,
+.reviews-cta {
+  background-image:
+    radial-gradient(circle at 8% 0, rgba(242, 173, 93, 0.1), transparent 20rem),
+    linear-gradient(145deg, rgba(16, 29, 43, 0.94), rgba(5, 11, 19, 0.96));
+}
+
+.reviews-provider h1 span,
+.review-card blockquote,
+.policy-cta .eyebrow,
+.wallet-demo-notice > span,
+.wallet-section-heading > span {
+  color: var(--accent);
+}
+
+.policy-card-allowed > span {
+  background: var(--green);
+  color: #06120d;
+}
+
+.policy-card-blocked > span {
+  background: var(--danger);
+  color: #1f0908;
+}
+
+.wallet-money-card[data-tone="frozen"],
+.point-entry-list .is-negative,
+.wallet-entry-value > span[data-status="frozen"] {
+  color: var(--danger);
+}
+
+.wallet-money-card[data-tone="paid"] {
+  color: var(--moon);
+}
+
+.wallet-entry-value > span[data-status="available"] {
+  background: rgba(8, 36, 27, 0.84);
+  color: var(--green);
+}
+
+.wallet-entry-value > span[data-status="frozen"] {
+  background: rgba(45, 18, 20, 0.84);
+}
+
+.wallet-entry-value > span[data-status="paid"] {
+  background: rgba(17, 31, 49, 0.88);
+  color: var(--moon);
+}
+
+.live-status.is-online,
+.live-wallet-strip p,
+.invitation-accepted {
+  color: var(--green);
+}
+
+.live-status.is-busy,
+.live-countdown strong,
+.invitation-pending {
+  color: var(--accent);
+}
+
+.site-footer .brand span,
+.site-header .brand span {
+  color: var(--accent);
+}
+
+@media (max-width: 620px) {
+  body.wolf-theme:not(:has(.home-main)) {
+    background-position: center, center, 50% top;
+    background-size: auto, auto, auto 100svh;
   }
 }

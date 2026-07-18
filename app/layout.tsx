@@ -40,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-Hant">
-      <body>{children}</body>
+      <body className="wolf-theme">{children}</body>
     </html>
   );
 }

@@ -1,7 +1,7 @@
 # 陪你玩服務市場｜階段工作交接
 
 - 交接日期：2026-07-19
-- 目前狀態：`DONE_PRIVATE_DEPLOY`（v0.6 功能、驗證與私人部署已完成）
+- 目前狀態：`READY_FOR_ARCHIVE`（v0.8 狼群視覺完成；語音房已取消並清理）
 - 目前分支：`main`
 - 本輪開始基準：`b1182d4ea6e34388d14e5f9dfb23fa970b615fb6`
 - 已部署來源：`9a6c1ab2b53fd2b42a38f33ed3b4c2798f1f4d50`
@@ -128,6 +128,9 @@ git diff --check
 
 ## 8. 封存邊界
 
-- 本輪只新增藍圖、交接與計畫紀錄，沒有修改產品程式、資料庫或部署。
-- 本階段已達 `READY_FOR_ARCHIVE`。
-- 藍圖與交接文件由本輪單一收尾提交保存；實際封存 Codex 工作、推送與重新部署未執行。
+- 狼群營火圖片 `public/voice-room-wolf-campfire.png` 已保留，並由 `docs/VISUAL_STYLE_GUIDE.md` 定為首頁愛將圖片以外的全站視覺基準。
+- `body.wolf-theme`、深夜森林／月光藍／營火橘 token 與非首頁低對比營火背景已完成；首頁仍使用 `hero-husky-night.webp`。
+- 語音房計畫已依使用者指示完整取消；`/voice-room`、語音元件、WebRTC／WebSocket／Durable Object、專用樣式與測試均已移除。
+- 2026-07-19 封存驗證：migration 6/6、領域 27/27、rendered HTML 7/7、lint、typecheck、production build 與 `git diff --check` 全部通過。
+- 本機 HTTP 再確認 `/voice-room` 回應 404；營火圖片回應 200、`image/png`、2,129,048 bytes。
+- 本階段已達 `READY_FOR_ARCHIVE`；不推送、不重新部署，線上 Sites 版本 11 仍是先前的私人 Demo。
