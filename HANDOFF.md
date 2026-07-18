@@ -1,9 +1,12 @@
 # 陪你玩服務市場｜階段工作交接
 
 - 交接日期：2026-07-19
-- 目前狀態：`READY_FOR_PRIVATE_DEPLOY`（v0.6 功能與本機驗證已完成，待保存及私人部署）
+- 目前狀態：`DONE_PRIVATE_DEPLOY`（v0.6 功能、驗證與私人部署已完成）
 - 目前分支：`main`
 - 本輪開始基準：`b1182d4ea6e34388d14e5f9dfb23fa970b615fb6`
+- 已部署來源：`9a6c1ab2b53fd2b42a38f33ed3b4c2798f1f4d50`
+- Sites 版本：11
+- 部署結果：`succeeded`（`appgdep_6a5bad7973c481918e4f8bd591b50edb`）
 - 私人示範站：[陪你玩服務市場](https://peiniwan-marketplace-v02.z72124223.chatgpt.site/)
 - 錢包示範頁：[金錢點數錢包](https://peiniwan-marketplace-v02.z72124223.chatgpt.site/wallet)
 - 即時接單頁：[打卡與 60 秒接單 Demo](https://peiniwan-marketplace-v02.z72124223.chatgpt.site/live)
@@ -112,6 +115,8 @@ git diff --check
 - rendered HTML（實際渲染頁面）測試：7/7 通過。
 - production build（正式建置）與 `git diff --check`：通過。
 - 桌面瀏覽器完整跑過打卡、149 點邀請接受、299 點完整 60 秒逾時返還與陪玩師下線；390px 手機寬度無水平溢位，瀏覽器錯誤紀錄為空。
+- 私人 Sites 版本 11 部署成功；線上首頁與 `/live` 均回應 200，線上 D1 種子為 Demo 玩家 1,200 可用點、0 保留點、6 位陪玩師初始離線。
+- 存取模式維持 `custom`，只允許站主 1 人且沒有任何群組。
 
 下次續作時先讀：
 

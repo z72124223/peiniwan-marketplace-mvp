@@ -58,7 +58,7 @@
 - [x] Step 29：建立 D1 查詢與原子操作 API，完成打卡、邀請、接受、拒絕及逾時返點。
 - [x] Step 30：建立私人 Demo 工作台與在線池互動介面。
 - [x] Step 31：更新文件，執行 lint、typecheck、tests、build、差異與瀏覽器驗證。
-- [ ] Step 32（Current）：以現有私人存取設定保存版本、部署並核對線上狀態。
+- [x] Step 32：以現有私人存取設定保存版本、部署並核對線上狀態。
 
 ### Verification
 
@@ -83,6 +83,7 @@
 - 2026-07-19：Step 29 完成。新增 D1 批次操作 API；以全新本機 D1 實測打卡、149 點保留、60 秒內接受並建立訂單，以及另一筆 299 點逾時返還、陪玩師下線。重複逾時回傳 409，玩家點數沒有再次增加。
 - 2026-07-19：Step 30 完成。新增 `/live` 私人雙角色操作台、在線池、D1 狀態恢復、60 秒倒數與邀請紀錄；瀏覽器實測 149 點邀請接受成立訂單，另筆 299 點邀請在完整 60 秒後返還並讓阿哲下線。390px 手機寬度無水平溢位，瀏覽器錯誤紀錄為空。
 - 2026-07-19：Step 31 完成。更新 README、交接、架構與流程藍圖；第一次 rendered HTML 測試發現安全揭露只存在於客戶端載入後，已補到伺服器初始頁面並重驗。最終 lint、typecheck、6 項 migration、27 項領域、7 項 rendered HTML、production build 與 `git diff --check` 全部通過，且未偏離 v0.6 凍結範圍。
+- 2026-07-19：Step 32 完成。將 commit `9a6c1ab2b53fd2b42a38f33ed3b4c2798f1f4d50` 推送至 Sites 來源庫，保存並部署私人版本 11；部署 `appgdep_6a5bad7973c481918e4f8bd591b50edb` 成功。線上首頁與 `/live` 均回應 200，D1 Demo 玩家為 1,200 可用點、0 保留點、6 位陪玩師初始離線；存取仍為 `custom`，只允許站主 1 人且無群組。
 
 ## Current Plan Window — v0.5 Blueprint Handoff And Archive Preparation
 
