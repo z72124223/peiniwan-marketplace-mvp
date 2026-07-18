@@ -321,6 +321,35 @@ export const availabilitySlots = sqliteTable(
   (table) => [index("availability_provider_time_idx").on(table.providerId, table.startsAt)]
 );
 
+export const providerShifts = sqliteTable(
+  "provider_shifts",
+  {
+    id: text("id").primaryKey(),
+    providerId: text("provider_id")
+      .notNull()
+      .references(() => providerProfiles.id, { onDelete: "cascade" }),
+    status: text("status", { enum: ["online", "ended"] })
+      .notNull()
+      .default("online"),
+    clockedInAt: text("clocked_in_at").notNull(),
+    clockedOutAt: text("clocked_out_at"),
+    endedReason: text("ended_reason", {
+      enum: ["manual", "invitation_declined", "invitation_expired"],
+    }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("provider_shifts_active_provider_idx")
+      .on(table.providerId)
+      .where(sql`${table.status} = 'online'`),
+    index("provider_shifts_provider_time_idx").on(
+      table.providerId,
+      table.clockedInAt
+    ),
+  ]
+);
+
 export const pricingSuggestions = sqliteTable(
   "pricing_suggestions",
   {
@@ -682,6 +711,75 @@ export const walletCreditEntries = sqliteTable(
       sql`${table.redeemableAfterPoints} >= 0`
     ),
     check("wallet_credit_entries_frozen_nonnegative", sql`${table.frozenAfterPoints} >= 0`),
+  ]
+);
+
+export const providerInvitations = sqliteTable(
+  "provider_invitations",
+  {
+    id: text("id").primaryKey(),
+    shiftId: text("shift_id")
+      .notNull()
+      .references(() => providerShifts.id),
+    playerId: text("player_id")
+      .notNull()
+      .references(() => users.id),
+    providerId: text("provider_id")
+      .notNull()
+      .references(() => providerProfiles.id),
+    providerServiceId: text("provider_service_id")
+      .notNull()
+      .references(() => providerServices.id),
+    playerWalletAccountId: text("player_wallet_account_id")
+      .notNull()
+      .references(() => walletCreditAccounts.id),
+    holdEntryId: text("hold_entry_id")
+      .notNull()
+      .references(() => walletCreditEntries.id),
+    releaseEntryId: text("release_entry_id").references(
+      () => walletCreditEntries.id
+    ),
+    orderId: text("order_id").references(() => orders.id),
+    status: text("status", {
+      enum: ["pending", "accepted", "declined", "expired", "cancelled"],
+    })
+      .notNull()
+      .default("pending"),
+    pointsAmount: integer("points_amount").notNull(),
+    twdMinorPerPointSnapshot: integer("twd_minor_per_point_snapshot")
+      .notNull()
+      .default(100),
+    expiresAt: text("expires_at").notNull(),
+    acceptedAt: text("accepted_at"),
+    resolvedAt: text("resolved_at"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("provider_invitations_pending_provider_idx")
+      .on(table.providerId)
+      .where(sql`${table.status} = 'pending'`),
+    uniqueIndex("provider_invitations_pending_player_idx")
+      .on(table.playerId)
+      .where(sql`${table.status} = 'pending'`),
+    index("provider_invitations_provider_status_idx").on(
+      table.providerId,
+      table.status,
+      table.expiresAt
+    ),
+    index("provider_invitations_player_status_idx").on(
+      table.playerId,
+      table.status,
+      table.createdAt
+    ),
+    check(
+      "provider_invitations_points_positive",
+      sql`${table.pointsAmount} > 0`
+    ),
+    check(
+      "provider_invitations_rate_positive",
+      sql`${table.twdMinorPerPointSnapshot} > 0`
+    ),
   ]
 );
 

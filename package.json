@@ -9,7 +9,7 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "vinext start",
-    "test": "node --experimental-sqlite --test tests/migration.test.mjs && tsx --test tests/validation.test.ts tests/owner-ops.test.ts tests/reviews.test.ts tests/wallet.test.ts && npm run build && node --test tests/rendered-html.test.mjs",
+    "test": "node --experimental-sqlite --test tests/migration.test.mjs && tsx --test tests/validation.test.ts tests/owner-ops.test.ts tests/reviews.test.ts tests/wallet.test.ts tests/live-marketplace.test.ts && npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate"

@@ -114,3 +114,15 @@ test("錢包頁正確顯示台幣買點、逾時扣錢包與現金兌換", async
   assert.doesNotMatch(html, /點數不是錢|不可購買、轉讓、提領、折抵/);
   assert.doesNotMatch(html, /\u0E40\u0E07\u0E34\u0E19/);
 });
+
+test("即時接單 Demo 清楚揭露角色與金流邊界", async () => {
+  const response = await render("/live");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /打卡・在線・60 秒接單/);
+  assert.match(html, /私人操作台測試兩種角色/);
+  assert.match(html, /陪玩師打卡台/);
+  assert.match(html, /在線陪玩師/);
+  assert.match(html, /這是角色操作模擬，不是正式登入/);
+  assert.doesNotMatch(html, /真實付款已啟用|正式身份驗證已完成/);
+});

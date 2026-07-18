@@ -29,6 +29,20 @@
       "when": 1784309662240,
       "tag": "0003_military_chimera",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1784391461772,
+      "tag": "0004_fresh_nuke",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1784391580193,
+      "tag": "0005_tiresome_xorn",
+      "breakpoints": true
     }
   ]
 }

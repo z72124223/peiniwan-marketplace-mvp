@@ -1,6 +1,6 @@
-# 陪你玩 v0.4 MVP
+# 陪你玩 v0.6 MVP
 
-「陪你玩」是 18+ 遊戲陪玩網站的私密示範版。此版本完成公開探索、陪玩師資料、陪玩師申請、站長人工派單流程，以及 `/wallet` 金錢點數錢包唯讀預覽；尚未開始真實交易。
+「陪你玩」是 18+ 遊戲陪玩網站的私人示範版。此版本完成公開探索、陪玩師資料、申請、站長人工派單、`/wallet` 金錢點數錢包預覽，以及 `/live` 的打卡、在線選人與 60 秒邀請閉環；尚未開始真實交易或正式登入。
 
 ## Prerequisites
 
@@ -21,6 +21,8 @@ npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" -
 npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" --config dist/server/wrangler.json --file drizzle/0001_outstanding_daimon_hellstrom.sql
 npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" --config dist/server/wrangler.json --file drizzle/0002_free_toad_men.sql
 npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" --config dist/server/wrangler.json --file drizzle/0003_military_chimera.sql
+npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" --config dist/server/wrangler.json --file drizzle/0004_fresh_nuke.sql
+npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" --config dist/server/wrangler.json --file drizzle/0005_tiresome_xorn.sql
 ```
 
 ## 已完成範圍
@@ -31,6 +33,8 @@ npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" -
 - 35 張資料表、Drizzle migration、seed data 與 Supabase/Postgres RLS 草案
 - 台幣買點、點選保留、陪玩收益、逾時扣款、虛擬禮物預留與現金兌換的帳務基礎
 - 清楚標示「沒有真實款項」的 `/wallet` 唯讀示範頁；玩家間轉點與點數交易市場未開放
+- `/live` 私人雙角色操作台：陪玩師打卡、只顯示在線可接單者、玩家選人、保留點數、60 秒接受／拒絕／逾時、玩家返點與陪玩師下線
+- 班次與邀請狀態保存於 D1；重新整理可恢復，重複接受或重複返點由伺服器端狀態檢查阻擋
 - 金流、KYC、R2、通知與外部通訊的 adapter 介面（尚未串正式供應商）
 - 全球／中國資料面分離的架構邊界；本輪不部署中國正式版
 
@@ -40,7 +44,8 @@ npx wrangler d1 execute site-creator-d1 --local --persist-to ".wrangler/state" -
 - 正式上線前必須補齊登入、伺服器端角色授權、個資遮罩、檔案掃描、速率限制與不可竄改稽核。
 - 本專案不是正式法律文件；政策草案需由營運地區的合格律師／法遵覆核。
 - 所有頁面與流程僅限 18 歲以上使用者。
-- 點數具有台幣價值，可支付服務並可進入現金兌換流程；陪玩師逾時未接單時會扣除錢包點數，但真實規則仍須完成金流、契約與法遵審查。
+- 點數具有台幣價值，可支付服務並可進入現金兌換流程；本版只執行 Demo 玩家保留與返點，未核定的陪玩師逾時扣點仍保持關閉。
+- `/live` 沒有正式角色驗證，只能維持私人存取；無瀏覽器狀態讀取時也沒有背景排程器主動掃描逾時邀請。
 
 ## 驗證指令
 

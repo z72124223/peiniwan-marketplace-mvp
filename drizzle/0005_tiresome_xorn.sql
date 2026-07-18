@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `provider_invitations_pending_player_idx` ON `provider_invitations` (`player_id`) WHERE "provider_invitations"."status" = 'pending';

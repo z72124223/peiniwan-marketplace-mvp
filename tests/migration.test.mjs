@@ -44,6 +44,8 @@ test("v0.2 migration applies with every required operational table", () => {
     "provider_point_entries",
     "wallet_credit_accounts",
     "wallet_credit_entries",
+    "provider_shifts",
+    "provider_invitations",
   ];
 
   const actualTables = database
@@ -54,6 +56,39 @@ test("v0.2 migration applies with every required operational table", () => {
   for (const table of requiredTables) {
     assert.ok(actualTables.includes(table), `missing table: ${table}`);
   }
+});
+
+test("live marketplace migration seeds the demo wallet and enforces one active shift", () => {
+  const database = migratedDatabase();
+  const wallet = database
+    .prepare(
+      "select owner_user_id, available_points, held_points from wallet_credit_accounts where id = ?"
+    )
+    .get("wallet_player_demo");
+  assert.deepEqual(
+    { ...wallet },
+    { owner_user_id: "user_player_demo", available_points: 1200, held_points: 0 }
+  );
+
+  database
+    .prepare(
+      `insert into provider_shifts
+        (id, provider_id, status, clocked_in_at)
+       values (?, ?, 'online', ?)`
+    )
+    .run("shift-an-1", "provider_an", "2026-07-19T00:00:00.000Z");
+
+  assert.throws(
+    () =>
+      database
+        .prepare(
+          `insert into provider_shifts
+            (id, provider_id, status, clocked_in_at)
+           values (?, ?, 'online', ?)`
+        )
+        .run("shift-an-2", "provider_an", "2026-07-19T00:00:01.000Z"),
+    /UNIQUE constraint failed/
+  );
 });
 
 test("wallet migration enforces immutable-ledger safety constraints", () => {

@@ -9,6 +9,7 @@ export function SiteHeader() {
         </Link>
         <nav className="desktop-nav" aria-label="主要導覽">
           <Link href="/explore">找陪玩師</Link>
+          <Link href="/live">即時接單 Demo</Link>
           <Link href="/concierge">站長幫你配</Link>
           <Link href="/apply">成為陪玩師</Link>
           <Link href="/policies">服務界線</Link>
