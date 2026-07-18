@@ -4,52 +4,54 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { seedGames, seedProviders } from "@/lib/seed-data";
 
-const heroProviders = seedProviders.slice(0, 3);
+const homeHeroProviders = seedProviders.slice(0, 2);
 
 export default function Home() {
   return (
     <>
       <SiteHeader />
-      <main>
-        <section className="hero section-shell">
-          <div className="hero-copy">
-            <p className="eyebrow">18+・先看人，再決定要不要約</p>
-            <h1>今晚，找個<span>合拍的隊友。</span></h1>
-            <p className="hero-lede">
-              想輕鬆打幾場、找人聊天，還是認真練一局？先看照片、聽聲音，覺得對再約。
-            </p>
-            <div className="hero-actions">
-              <Link className="button button-primary" href="/explore?axis=emotional">
-                我想輕鬆玩
-              </Link>
-              <Link className="button button-secondary" href="/explore?axis=technical">
-                我想認真打
-              </Link>
-            </div>
-            <Link className="concierge-link" href="/concierge">
-              懶得一個個看？跟站長說你要什麼 <span aria-hidden>→</span>
-            </Link>
-          </div>
+      <main className="home-main">
+        <section className="home-hero">
+          <figure className="home-hero-wallpaper">
+            {/* Generated project-local wallpaper is intentionally rendered as a native image. */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/hero-husky-night.webp"
+              alt="趴著歪頭、融入首頁桌布的長毛哈士奇愛醬"
+            />
+            <div className="home-hero-shade" aria-hidden />
+          </figure>
 
-          <div className="hero-gallery" aria-label="示範陪玩師">
-            {heroProviders.map((provider, index) => (
-              <article className={`hero-person hero-person-${index + 1}`} key={provider.id}>
-                {/* External demo portraits are intentionally rendered as native images. */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={provider.imageUrl} alt={`${provider.displayName}的示範人像`} />
-                <div>
-                  <strong>{provider.displayName}</strong>
-                  <span>{provider.personaTags.slice(0, 2).join("・")}</span>
-                </div>
-              </article>
-            ))}
-            <div className="hero-note">
-              示範名單・尚未開放接單
+          <div className="home-hero-inner section-shell">
+            <div className="home-hero-copy">
+              <h1>
+                今晚，找到
+                <span><em>懂你節奏</em>的狼群。</span>
+              </h1>
+              <p className="home-hero-lede">
+                不管想輕鬆打、認真上分，或只是找人聊聊。先看看人、聽聽聲音，合拍再約。
+              </p>
+            </div>
+
+            <div className="home-hero-portraits" aria-label="示範陪玩師照片">
+              {homeHeroProviders.map((provider, index) => (
+                <article className={`home-hero-portrait home-hero-portrait-${index + 1}`} key={provider.id}>
+                  {/* External demo portraits are intentionally rendered as native images. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={provider.imageUrl} alt={`${provider.displayName}的示範人像`} />
+                  <span>
+                    {provider.displayName}
+                    <small>{provider.personaTags[0]}</small>
+                  </span>
+                </article>
+              ))}
             </div>
           </div>
+          <div className="home-hero-orbit home-hero-orbit-one" aria-hidden />
+          <div className="home-hero-orbit home-hero-orbit-two" aria-hidden />
         </section>
 
-        <section className="trust-strip section-shell" aria-label="平台特色">
+        <section className="trust-strip home-trust-strip section-shell" aria-label="平台特色">
           <span>正式上架前會人工確認照片與語音</span>
           <span>目前價格是示範，不會直接扣款</span>
           <span>需求會由真人站長逐筆查看</span>

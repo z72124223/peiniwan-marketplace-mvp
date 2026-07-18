@@ -53,8 +53,10 @@ test("首頁會渲染正式 MVP 內容，不含 starter 佔位畫面", async () 
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
   const html = await response.text();
-  assert.match(html, /今晚，找個/);
-  assert.match(html, /合拍的隊友/);
+  assert.match(html, /今晚，找到/);
+  assert.match(html, /懂你節奏/);
+  assert.match(html, /狼群首頁/);
+  assert.match(html, /hero-husky-night\.webp/);
   assert.match(html, /照你現在的心情選/);
   assert.doesNotMatch(html, /今天想被陪伴|不是先選遊戲/);
   assert.match(html, /目前是示範網站/);

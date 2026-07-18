@@ -9,24 +9,24 @@ export async function generateMetadata(): Promise<Metadata> {
   const localHost = host?.startsWith("localhost") || host?.startsWith("127.0.0.1");
   const protocol = forwardedProtocol ?? (localHost ? "http" : "https");
   const origin = host ? `${protocol}://${host}` : "https://peiniwan-marketplace-v02.z72124223.chatgpt.site";
-  const socialImage = `${origin}/og-peiniwan-audit-v3.png`;
+  const socialImage = `${origin}/hero-husky-night.webp`;
 
   return {
     title: {
-      default: "陪你玩｜找到今晚合拍的人",
-      template: "%s｜陪你玩",
+      default: "狼群｜找到今晚合拍的人",
+      template: "%s｜狼群",
     },
     description: "找個合拍的遊戲隊友：想放鬆、想聊天，或想認真練一局都可以先看看。",
     openGraph: {
-      title: "陪你玩｜找到今晚合拍的人",
+      title: "狼群｜找到今晚合拍的人",
       description: "想輕鬆打幾場、找人聊天，還是認真練一局？先看看人，覺得對再約。",
       locale: "zh_TW",
       type: "website",
-      images: [{ url: socialImage, width: 1731, height: 909, alt: "陪你玩・今晚找個合拍的隊友" }],
+      images: [{ url: socialImage, width: 1717, height: 916, alt: "狼群・今晚找到懂你節奏的隊友" }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "陪你玩｜找到今晚合拍的人",
+      title: "狼群｜找到今晚合拍的人",
       description: "想輕鬆打幾場、找人聊天，還是認真練一局？先看看人，覺得對再約。",
       images: [socialImage],
     },

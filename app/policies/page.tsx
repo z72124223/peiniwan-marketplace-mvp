@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 
 export const metadata: Metadata = {
   title: "合法與禁止服務政策",
-  description: "陪你玩私密 MVP 的 18+、允許服務、禁止內容、檢舉與人工處置政策草案。",
+  description: "狼群私密 MVP 的 18+、允許服務、禁止內容、檢舉與人工處置政策草案。",
 };
 
 const allowed = [
@@ -32,7 +32,7 @@ export default function PoliciesPage() {
         <header className="policy-hero">
           <span className="eyebrow">TRUST &amp; SAFETY・v0.2 草案</span>
           <h1>能被清楚說明的界線，才有資格談陪伴。</h1>
-          <p>平台只服務年滿 18 歲的使用者。陪你玩提供的是遊戲、語音互動、陪伴感與技能服務媒合，不是色情、博弈、代打或心理治療平台。</p>
+          <p>平台只服務年滿 18 歲的使用者。狼群提供的是遊戲、語音互動、陪伴感與技能服務媒合，不是色情、博弈、代打或心理治療平台。</p>
           <div className="policy-draft-note"><strong>重要：</strong>這是私密 MVP 的營運政策草案，不能取代正式使用者條款、隱私權政策或合格法律意見。</div>
         </header>
 
